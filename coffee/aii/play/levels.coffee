@@ -27,4 +27,11 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 						@tiles.push tile
 						return tile
 
+			@properties
+				pixelWidth:
+					get: -> ns.Level.WIDTH * Tile.WIDTH
+
+				pixelHeight:
+					get: -> ns.Level.HEIGHT * Tile.HEIGHT
+
 		return ns
