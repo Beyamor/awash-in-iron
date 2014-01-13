@@ -1,10 +1,12 @@
-define ['jinn/scenes'],
-	({Scene}) ->
+define ['jinn/scenes', "aii/play/levels"],
+	({Scene}, {Level}) ->
 		ns = {}
 
 		class ns.PlayScene extends Scene
 			begin: ->
 				super()
-				console.log "beginning play scene"
+
+				@level = new Level
+				@add tile for tile in @level.tiles
 
 		return ns
