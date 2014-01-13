@@ -1,0 +1,5 @@
+*.swp
+js
+coffee/jinn
+css
+.sass-cache
