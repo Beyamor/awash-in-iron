@@ -1,8 +1,10 @@
-define ['jinn/app', 'jinn/debug', 'jinn/input'],
-	(app, debug, input) ->
+define ['jinn/app', 'jinn/debug', 'jinn/input',
+	'aii/play/scene'],
+	(app, debug, input,\
+	{PlayScene}) ->
 		debug.config
 			enabled: true
-			types:
+			flags:
 				fps: true
 
 		app.assets = [
@@ -14,4 +16,4 @@ define ['jinn/app', 'jinn/debug', 'jinn/input'],
 			id: "game"
 			backgroundColor: "#2C2A2E"
 			init: ->
-				alert "hello world"
+				app.scene = new PlayScene
