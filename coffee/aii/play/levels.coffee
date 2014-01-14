@@ -13,7 +13,7 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 					graphic:	new gfx.Rect(
 								Tile.WIDTH,
 								Tile.HEIGHT,
-								util.random.choose "red", "yellow", "blue"
+								util.random.choose "#E0D294", "#E3D7A1", "#F0E2A3"
 					)
 
 		class ns.Level
