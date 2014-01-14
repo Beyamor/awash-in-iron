@@ -1,9 +1,9 @@
 define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 	"jinn/input", "jinn/app", "jinn/debug/definitions",
-	"aii/play/entities"],
+	"aii/play/entities", "aii/play/control"],
 	({Scene}, {Level}, {CameraWrapper, BoundedCamera},\
 	input, app, definitionsDebug,\
-	{Unit}) ->
+	{Unit}, control) ->
 		ns = {}
 
 		defs = app.definitions
@@ -29,6 +29,11 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@y += dy * defs.CAMERA_PAN_SPEED * app.elapsed
 
 		class ns.PlayScene extends Scene
+			constructor: ->
+				super()
+
+				@controlState = control.stateMachine this
+
 			begin: ->
 				super()
 
@@ -46,25 +51,12 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				definitionsDebug.toggle() if input.pressed "vk_grave"
 
+				@controlState.update()
+
 				if input.mouseMoved
 					@activeTile.highlight.hide() if @activeTile?
 					@activeTile = @mouseTile
-					@activeTile.highlight.show() if @selectedUnit?
-
-				if input.pressed 'mouse-left'
-					if @selectedUnit?
-						unless @mouseTile.unit?
-							@mouseTile.addUnit @selectedUnit
-							@selectedUnit = null
-							@activeTile.highlight.hide() if @activeTile?
-					else
-						@selectedUnit = @mouseTile.unit
-						@activeTile.highlight.show() if @activeTile?
-
-				if input.pressed 'mouse-right'
-					if @selectedUnit?
-						@selectedUnit = null
-						@activeTile.highlight.hide()
+					@activeTile.highlight.show() if @controlState.state.showsHiglight
 
 			@properties
 				mouseTile:
