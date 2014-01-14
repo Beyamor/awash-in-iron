@@ -1,32 +1,30 @@
 define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
-	"jinn/input"],
+	"jinn/input", "jinn/app", "jinn/debug/definitions"],
 	({Scene}, {Level}, {CameraWrapper},\
-	input) ->
+	input, app, definitionsDebug) ->
 		ns = {}
 
-		class DraggedCamera extends CameraWrapper
-			@isDragging = false
+		defs = app.definitions
+		app.define
+			CAMERA_PAN_SPEED:	700
 
+		class KeyCamera extends CameraWrapper
 			update: ->
 				super()
 
-				if input.pressed "mouse-left"
-					@isDragging	= true
-					@prevX		= input.mouseX
-					@prevY		= input.mouseY
+				dx = dy = 0
 
-				if @isDragging
-					dx	= input.mouseX - @prevX
-					dy	= input.mouseY - @prevY
+				dx -= 1 if input.isDown "pan-left"
+				dx += 1 if input.isDown "pan-right"
+				dy -= 1 if input.isDown "pan-up"
+				dy += 1 if input.isDown "pan-down"
 
-					@base.x -= dx
-					@base.y -= dy
+				if dx isnt 0 and dy isnt 0
+					dx *= Math.SQRT1_2
+					dy *= Math.SQRT1_2
 
-					@prevX	= input.mouseX
-					@prevY	= input.mouseY
-
-				if input.released "mouse-left"
-					@isDragging = false
+				@x += dx * defs.CAMERA_PAN_SPEED * app.elapsed
+				@y += dy * defs.CAMERA_PAN_SPEED * app.elapsed
 
 		class ns.PlayScene extends Scene
 			begin: ->
@@ -35,6 +33,11 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@level = new Level
 				@add tile for tile in @level.tiles
 
-				@camera = new DraggedCamera @camera
+				@camera = new KeyCamera @camera
+
+			update: ->
+				super()
+
+				definitionsDebug.toggle() if input.pressed "vk_grave"
 
 		return ns
