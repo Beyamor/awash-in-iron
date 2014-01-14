@@ -35,8 +35,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 				@unit		= unit
 				@scene.add unit if @scene?
 
-				unit.x = @centerX
-				unit.y = @centerY
+				unit.centerX = @centerX
+				unit.centerY = @centerY
 
 			added: ->
 				@scene.add @unit if @unit?
