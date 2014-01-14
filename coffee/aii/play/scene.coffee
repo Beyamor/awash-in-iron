@@ -49,15 +49,17 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				if input.mouseMoved
 					@activeTile.highlight.hide() if @activeTile?
 					@activeTile = @mouseTile
-					@activeTile.highlight.show() if @activeTile?
+					@activeTile.highlight.show() if @selectedUnit?
 
 				if input.pressed 'mouse-left'
 					if @selectedUnit?
 						unless @mouseTile.unit?
 							@mouseTile.addUnit @selectedUnit
 							@selectedUnit = null
+							@activeTile.highlight.hide() if @activeTile?
 					else
 						@selectedUnit = @mouseTile.unit
+						@activeTile.highlight.show() if @activeTile?
 
 			@properties
 				mouseTile:
