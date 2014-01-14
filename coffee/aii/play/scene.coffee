@@ -1,6 +1,6 @@
 define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 	"jinn/input", "jinn/app", "jinn/debug/definitions"],
-	({Scene}, {Level}, {CameraWrapper},\
+	({Scene}, {Level}, {CameraWrapper, BoundedCamera},\
 	input, app, definitionsDebug) ->
 		ns = {}
 
@@ -33,7 +33,8 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@level = new Level
 				@add tile for tile in @level.tiles
 
-				@camera = new KeyCamera @camera
+				@camera = new BoundedCamera {left: 0, right: @level.pixelWidth, top: 0, bottom: @level.pixelWidth},
+						new KeyCamera @camera
 
 			update: ->
 				super()
