@@ -53,6 +53,14 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 			remove: ->
 				@world.remove unit if @unit?
 
+			@properties
+				neighbours:
+					get: ->
+						unless @_neighbours?
+							@_neighbours = (neighbour for neighbour in [@north, @south, @east, @west]\
+										when neighbour?)
+						return @_neighbours
+
 		class ns.TileHighlight extends Entity
 			@WIDTH:		64
 			@HEIGHT:	64
@@ -104,6 +112,12 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 						tile = new Tile util.random.any(terrainOptions), x, y
 						@tiles.push tile
 						return tile
+
+				util.array2d.each @grid, (i, j, tile) =>
+					tile.north	= @grid[i][j-1] if j > 0
+					tile.south	= @grid[i][j+1] if j < ns.Level.HEIGHT-1
+					tile.east	= @grid[i-1][j] if i > 0
+					tile.west	= @grid[i+1][j] if i < ns.Level.WIDTH-1
 
 			pixelToTile: (pixelX, pixelY) ->
 				x = Math.floor(pixelX / Tile.WIDTH)
