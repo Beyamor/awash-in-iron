@@ -3,8 +3,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 		ns = {}
 
 		class Tile extends Entity
-			@WIDTH:		48
-			@HEIGHT:	48
+			@WIDTH:		64
+			@HEIGHT:	64
 
 			constructor: (x, y) ->
 				super
@@ -17,8 +17,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 					)
 
 		class ns.Level
-			@WIDTH:		24
-			@HEIGHT:	24
+			@WIDTH:		18
+			@HEIGHT:	18
 
 			constructor: ->
 				@tiles	= []
