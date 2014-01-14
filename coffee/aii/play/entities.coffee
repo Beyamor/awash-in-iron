@@ -9,5 +9,7 @@ define ["jinn/entities", "jinn/graphics"],
 				super
 					graphic:	graphic
 					centered:	true
+					width:		48
+					height:		48
 
 		return ns

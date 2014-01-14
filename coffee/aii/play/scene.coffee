@@ -39,9 +39,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 						new KeyCamera @camera
 
 				unit = new Unit
-				unit.x = 100
-				unit.y = 100
-				@add unit
+				@level.grid[3][3].addUnit unit
 
 			update: ->
 				super()

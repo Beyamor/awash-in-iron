@@ -10,11 +10,38 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 				super
 					x:		x * Tile.WIDTH
 					y:		y * Tile.HEIGHT
+					width:		Tile.WIDTH
+					height:		Tile.HEIGHT
 					layer:		200
 					graphic:	new gfx.Rect
 								width:	Tile.WIDTH
 								height:	Tile.HEIGHT
 								color:	util.random.choose "#E0D294", "#E3D7A1", "#F0E2A3"
+
+			addUnit: (unit) ->
+				throw new Error "Tiles already contains a unit" if @unit?
+
+				unit.tile.removeUnit() if unit.tile?
+
+				unit.tile	= this
+				@unit		= unit
+				@scene.add unit if @scene?
+
+				unit.x = @centerX
+				unit.y = @centerY
+
+			added: ->
+				@scene.add @unit if @unit?
+
+			removeUnit: ->
+				return unless @unit?
+
+				unit.world.remove unit if unit.world?
+				unit.tile	= null
+				@unit		= null
+
+			remove: ->
+				@world.remove unit if @unit?
 
 		class ns.Level
 			@WIDTH:		18
