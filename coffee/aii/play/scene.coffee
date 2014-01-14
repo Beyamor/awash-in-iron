@@ -38,10 +38,8 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@camera = new BoundedCamera {left: 0, right: @level.pixelWidth, top: 0, bottom: @level.pixelWidth},
 						new KeyCamera @camera
 
-				unit = new Unit
-				@level.grid[3][3].addUnit unit
-
-				@activeTile = null
+				@level.grid[3][3].addUnit new Unit
+				@level.grid[5][3].addUnit new Unit
 
 			update: ->
 				super()
@@ -55,8 +53,9 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				if input.pressed 'mouse-left'
 					if @selectedUnit?
-						@mouseTile.addUnit @selectedUnit
-						@selectedUnit = null
+						unless @mouseTile.unit?
+							@mouseTile.addUnit @selectedUnit
+							@selectedUnit = null
 					else
 						@selectedUnit = @mouseTile.unit
 
