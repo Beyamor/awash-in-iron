@@ -7,24 +7,16 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 			@HEIGHT:	64
 
 			constructor: (x, y) ->
-				tile = new gfx.Rect
-						width:	Tile.WIDTH
-						height:	Tile.HEIGHT
-						color:	util.random.choose "#E0D294", "#E3D7A1", "#F0E2A3"
-
-				@highlight = new gfx.Rect
-						width:		Tile.WIDTH
-						height:		Tile.HEIGHT
-						color:		"rgba(119, 129, 237, 0.5)"
-						visible:	false
-
 				super
 					x:		x * Tile.WIDTH
 					y:		y * Tile.HEIGHT
 					width:		Tile.WIDTH
 					height:		Tile.HEIGHT
 					layer:		200
-					graphic:	new gfx.GraphicsList(tile, @highlight)
+					graphic:	new gfx.Rect
+								width:	Tile.WIDTH
+								height:	Tile.HEIGHT
+								color:	util.random.choose "#E0D294", "#E3D7A1", "#F0E2A3"
 
 			addUnit: (unit) ->
 				throw new Error "Tiles already contains a unit" if @unit?
@@ -50,6 +42,43 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 
 			remove: ->
 				@world.remove unit if @unit?
+
+		class ns.TileHighlight extends Entity
+			@WIDTH:		64
+			@HEIGHT:	64
+
+			constructor: (x, y) ->
+				super
+					x:		x * Tile.WIDTH
+					y:		y * Tile.HEIGHT
+					width:		Tile.WIDTH
+					height:		Tile.HEIGHT
+					layer:		200
+					graphic:	new gfx.Rect
+								width:		Tile.WIDTH
+								height:		Tile.HEIGHT
+								color:		"rgba(119, 129, 237, 0.5)"
+								visible:	false
+
+			show: ->
+				@isShowing		= true
+				@graphic.visible	= true
+				@reposition()
+
+			hide: ->
+				@isShowing		= false
+				@graphic.visible	= false
+
+			reposition: ->
+				tile		= @scene.mouseTile
+				@centerX	= tile.centerX
+				@centerY	= tile.centerY
+
+			update: ->
+				super()
+
+				@reposition() if @isShowing
+					
 
 		class ns.Level
 			@WIDTH:		18

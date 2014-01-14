@@ -2,34 +2,39 @@ define ["jinn/control/states", "jinn/input"],
 	({StateMachine}, input) ->
 		ns = {}
 
-		class DefaultState
-			constructor: (@level) ->
+		class ControlState
+			constructor: (@scene) ->
 
+			begin: ->
+				if @showsHiglight
+					@scene.tileHighlight.show()
+				else
+					@scene.tileHighlight.hide()
+
+		class DefaultState extends ControlState
 			update: ->
 				if input.pressed "mouse-left"
-					if @level.mouseTile.unit?
-						@level.selectedUnit = @level.mouseTile.unit
-						@level.controlState.switchTo "selected"
+					if @scene.mouseTile.unit?
+						@scene.selectedUnit = @scene.mouseTile.unit
+						@scene.controlState.switchTo "selected"
 
-		class SelectedState
+		class SelectedState extends ControlState
 			showsHiglight: true
 
-			constructor: (@level) ->
-
 			update: ->
 				if input.pressed "mouse-left"
-					unless @level.mouseTile.unit?
-						@level.mouseTile.addUnit @level.selectedUnit
-						@level.controlState.switchTo "default"
+					unless @scene.mouseTile.unit?
+						@scene.mouseTile.addUnit @scene.selectedUnit
+						@scene.controlState.switchTo "default"
 
 				if input.pressed "mouse-right"
-					@level.controlState.switchTo "default"
+					@scene.controlState.switchTo "default"
 
-		ns.stateMachine = (level) ->
+		ns.stateMachine = (scene) ->
 			return new StateMachine
 				initial: "default"
 				states:
-					default:	new DefaultState level
-					selected:	new SelectedState level
+					default:	new DefaultState scene
+					selected:	new SelectedState scene
 
 		return ns
