@@ -41,9 +41,15 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				unit = new Unit
 				@level.grid[3][3].addUnit unit
 
+				@activeTile = null
+
 			update: ->
 				super()
 
 				definitionsDebug.toggle() if input.pressed "vk_grave"
+
+				@activeTile.highlight.hide() if @activeTile?
+				@activeTile = @level.pixelToTile input.mouseX + @camera.x, input.mouseY + @camera.y
+				@activeTile.highlight.show() if @activeTile?
 
 		return ns

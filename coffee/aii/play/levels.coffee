@@ -7,16 +7,24 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 			@HEIGHT:	64
 
 			constructor: (x, y) ->
+				tile = new gfx.Rect
+						width:	Tile.WIDTH
+						height:	Tile.HEIGHT
+						color:	util.random.choose "#E0D294", "#E3D7A1", "#F0E2A3"
+
+				@highlight = new gfx.Rect
+						width:		Tile.WIDTH
+						height:		Tile.HEIGHT
+						color:		"rgba(119, 129, 237, 0.5)"
+						visible:	false
+
 				super
 					x:		x * Tile.WIDTH
 					y:		y * Tile.HEIGHT
 					width:		Tile.WIDTH
 					height:		Tile.HEIGHT
 					layer:		200
-					graphic:	new gfx.Rect
-								width:	Tile.WIDTH
-								height:	Tile.HEIGHT
-								color:	util.random.choose "#E0D294", "#E3D7A1", "#F0E2A3"
+					graphic:	new gfx.GraphicsList(tile, @highlight)
 
 			addUnit: (unit) ->
 				throw new Error "Tiles already contains a unit" if @unit?
@@ -53,6 +61,12 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 						tile = new Tile x, y
 						@tiles.push tile
 						return tile
+
+			pixelToTile: (pixelX, pixelY) ->
+				x = Math.floor(pixelX / Tile.WIDTH)
+				y = Math.floor(pixelY / Tile.HEIGHT)
+
+				return @grid[x][y]
 
 			@properties
 				pixelWidth:
