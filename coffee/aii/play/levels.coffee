@@ -5,11 +5,11 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 		terrains = {
 			dirt:
 				color:		"#E0D294"
-				passable:	true
+				isPassable:	true
 
 			rock:
 				color:		"#47473C"
-				passable:	false
+				isPassable:	false
 		}
 
 		class Tile extends Entity
@@ -61,42 +61,26 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 										when neighbour?)
 						return @_neighbours
 
+				isPassable:
+					get: -> @terrain.isPassable and not @unit?
+
 		class ns.TileHighlight extends Entity
-			@WIDTH:		64
-			@HEIGHT:	64
+			constructor: (tile) ->
+				margin = 6
 
-			constructor: (x, y) ->
 				super
-					x:		x * Tile.WIDTH
-					y:		y * Tile.HEIGHT
-					width:		Tile.WIDTH
-					height:		Tile.HEIGHT
-					layer:		200
+					x:		tile.x
+					y:		tile.y
+					width:		tile.width - margin
+					height:		tile.height - margin
+					layer:		tile.layer - 1
 					graphic:	new gfx.Rect
-								width:		Tile.WIDTH
-								height:		Tile.HEIGHT
-								color:		"rgba(119, 129, 237, 0.5)"
-								visible:	false
+								width:		tile.width - margin
+								height:		tile.height - margin
+								color:		"rgba(119, 129, 237, 0.1)"
 
-			show: ->
-				@isShowing		= true
-				@graphic.visible	= true
-				@reposition()
-
-			hide: ->
-				@isShowing		= false
-				@graphic.visible	= false
-
-			reposition: ->
-				tile		= @scene.mouseTile
-				@centerX	= tile.centerX
-				@centerY	= tile.centerY
-
-			update: ->
-				super()
-
-				@reposition() if @isShowing
-					
+				@centerX = tile.centerX
+				@centerY = tile.centerY
 
 		class ns.Level
 			@WIDTH:		16
@@ -131,5 +115,26 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 
 				pixelHeight:
 					get: -> ns.Level.HEIGHT * Tile.HEIGHT
+
+		ns.reachableTiles = (center, range) ->
+			return [] if range <= 0
+
+			closedList	= []
+			openList	= (neighbour for neighbour in center.neighbours when neighbour.isPassable)
+
+			while range > 0
+				nextOpenList = []
+				for open in openList
+					for next in open.neighbours when next.isPassable
+						continue if next is center
+						continue if nextOpenList.indexOf(next)	isnt -1
+						continue if openList.indexOf(next)	isnt -1
+						continue if closedList.indexOf(next)	isnt -1
+						nextOpenList.push next
+					closedList.push open
+				openList = nextOpenList
+				--range
+
+			return closedList
 
 		return ns

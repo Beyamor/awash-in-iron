@@ -1,7 +1,7 @@
 define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 	"jinn/input", "jinn/app", "jinn/debug/definitions",
 	"aii/play/entities", "aii/play/control"],
-	({Scene}, {Level, TileHighlight}, {CameraWrapper, BoundedCamera},\
+	({Scene}, {Level}, {CameraWrapper, BoundedCamera},\
 	input, app, definitionsDebug,\
 	{Unit}, control) ->
 		ns = {}
@@ -45,9 +45,6 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				@level.grid[3][3].addUnit new Unit
 				@level.grid[5][3].addUnit new Unit
-
-				@tileHighlight = new TileHighlight
-				@add @tileHighlight
 
 			update: ->
 				super()

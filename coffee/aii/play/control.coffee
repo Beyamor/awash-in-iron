@@ -1,25 +1,26 @@
-define ["jinn/control/states", "jinn/input"],
-	({StateMachine}, input) ->
+define ["jinn/control/states", "jinn/input", "aii/play/levels"],
+	({StateMachine}, input, levels) ->
 		ns = {}
 
 		class ControlState
 			constructor: (@scene) ->
-
-			begin: ->
-				if @showsHiglight
-					@scene.tileHighlight.show()
-				else
-					@scene.tileHighlight.hide()
 
 		class DefaultState extends ControlState
 			update: ->
 				if input.pressed "mouse-left"
 					if @scene.mouseTile.unit?
 						@scene.selectedUnit = @scene.mouseTile.unit
-						@scene.controlState.switchTo "selected"
+						@scene.controlState.switchTo "move"
 
-		class SelectedState extends ControlState
-			showsHiglight: true
+		class MoveState extends ControlState
+			begin: ->
+				@reachableTiles	= levels.reachableTiles @scene.selectedUnit.tile, 3
+				@highlights	= []
+
+				for tile in @reachableTiles
+					highlight = new levels.TileHighlight tile
+					@scene.add highlight
+					@highlights.push highlight
 
 			update: ->
 				if input.pressed "mouse-left"
@@ -30,11 +31,15 @@ define ["jinn/control/states", "jinn/input"],
 				if input.pressed "mouse-right"
 					@scene.controlState.switchTo "default"
 
+			end: ->
+				for highlight in @highlights
+					@scene.remove highlight
+
 		ns.stateMachine = (scene) ->
 			return new StateMachine
 				initial: "default"
 				states:
 					default:	new DefaultState scene
-					selected:	new SelectedState scene
+					move:		new MoveState scene
 
 		return ns
