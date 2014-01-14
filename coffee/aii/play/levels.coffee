@@ -10,11 +10,11 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 				super
 					x:		x * Tile.WIDTH
 					y:		y * Tile.HEIGHT
-					graphic:	new gfx.Rect(
-								Tile.WIDTH,
-								Tile.HEIGHT,
-								util.random.choose "#E0D294", "#E3D7A1", "#F0E2A3"
-					)
+					layer:		200
+					graphic:	new gfx.Rect
+								width:	Tile.WIDTH
+								height:	Tile.HEIGHT
+								color:	util.random.choose "#E0D294", "#E3D7A1", "#F0E2A3"
 
 		class ns.Level
 			@WIDTH:		18

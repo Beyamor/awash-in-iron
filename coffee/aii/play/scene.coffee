@@ -1,7 +1,9 @@
 define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
-	"jinn/input", "jinn/app", "jinn/debug/definitions"],
+	"jinn/input", "jinn/app", "jinn/debug/definitions",
+	"aii/play/entities"],
 	({Scene}, {Level}, {CameraWrapper, BoundedCamera},\
-	input, app, definitionsDebug) ->
+	input, app, definitionsDebug,\
+	{Unit}) ->
 		ns = {}
 
 		defs = app.definitions
@@ -35,6 +37,11 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				@camera = new BoundedCamera {left: 0, right: @level.pixelWidth, top: 0, bottom: @level.pixelWidth},
 						new KeyCamera @camera
+
+				unit = new Unit
+				unit.x = 100
+				unit.y = 100
+				@add unit
 
 			update: ->
 				super()
