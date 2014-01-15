@@ -116,16 +116,18 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 				pixelHeight:
 					get: -> ns.Level.HEIGHT * Tile.HEIGHT
 
-		ns.reachableTiles = (center, range) ->
+		ns.tilesAround = (center, range, filter) ->
 			return [] if range <= 0
 
+			filter or= -> true
+
 			closedList	= []
-			openList	= (neighbour for neighbour in center.neighbours when neighbour.isPassable)
+			openList	= (neighbour for neighbour in center.neighbours when filter neighbour)
 
 			while range > 0
 				nextOpenList = []
 				for open in openList
-					for next in open.neighbours when next.isPassable
+					for next in open.neighbours when filter next
 						continue if next is center
 						continue if nextOpenList.indexOf(next)	isnt -1
 						continue if openList.indexOf(next)	isnt -1
