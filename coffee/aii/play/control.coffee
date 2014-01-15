@@ -1,5 +1,7 @@
-define ["jinn/control/states", "jinn/input", "aii/play/levels"],
-	({StateMachine}, input, levels) ->
+define ["jinn/control/states", "jinn/input", "aii/play/levels",
+	"jinn/app"],
+	({StateMachine}, input, levels,\
+	app) ->
 		ns = {}
 
 		class ControlState
@@ -10,7 +12,24 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels"],
 				if input.pressed "mouse-left"
 					if @scene.mouseTile.unit?
 						@scene.selectedUnit = @scene.mouseTile.unit
-						@scene.controlState.switchTo "move"
+						@scene.controlState.switchTo "selectAction"
+
+		class SelectActionState extends ControlState
+			begin: ->
+				@el = $(app.templates.compile "action-select-menu")
+				app.container.append @el
+				@el.offset
+					left:	@scene.selectedUnit.tile.left
+					top:	@scene.selectedUnit.tile.top
+
+				$('.move', @el).click => @scene.controlState.switchTo "move"
+
+			update: ->
+				if input.pressed "mouse-right"
+					@scene.controlState.switchTo "default"
+
+			end: ->
+				@el.remove()
 
 		class MoveState extends ControlState
 			begin: ->
@@ -41,5 +60,6 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels"],
 				states:
 					default:	new DefaultState scene
 					move:		new MoveState scene
+					selectAction:	new SelectActionState scene
 
 		return ns

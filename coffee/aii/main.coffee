@@ -10,6 +10,10 @@ define ['jinn/app', 'jinn/debug', 'jinn/input',
 		app.assets = [
 		]
 
+		app.templates = [
+			["action-select-menu", "templates/action-select-menu.html"]
+		]
+
 		input.define
 			"pan-left":	"vk_a"
 			"pan-right":	"vk_d"
