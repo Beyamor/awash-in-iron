@@ -1,5 +1,9 @@
+@import "definitions";
+
 body {
 	margin: 0px;
+	font-family: $main-font;
+	color: $main-color
 }
 
 #game {

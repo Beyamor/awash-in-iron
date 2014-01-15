@@ -1,0 +1,18 @@
+@import "definitions";
+
+.action-select-menu {
+	display:		inline-block;
+	margin:			0px;
+	padding:		5px;
+	background-color:	$background-color;
+
+	li {
+		list-style:	none;
+		font-weight:	bold;
+
+		&:hover {
+			color:	$highlight-color;
+			cursor:	pointer;
+		}
+	}
+}
