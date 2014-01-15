@@ -11,6 +11,7 @@ define ['jinn/app', 'jinn/debug', 'jinn/input',
 		]
 
 		app.templates = [
+			["click-off-panel", "templates/click-off-panel.html"]
 			["action-select-menu", "templates/play/action-select-menu.html"]
 		]
 

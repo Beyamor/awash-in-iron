@@ -16,21 +16,26 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 		class SelectActionState extends ControlState
 			begin: ->
-				@el = $(app.templates.compile "action-select-menu")
-				app.container.append @el
-				@el.offset
+				@cancelEl = $(app.templates.compile "click-off-panel")
+				app.container.append @cancelEl
+				@cancelEl.click => @scene.controlState.switchTo "default"
+
+				@menuEl = $(app.templates.compile "action-select-menu")
+				app.container.append @menuEl
+				@menuEl.offset
 					left:	@scene.selectedUnit.tile.left
 					top:	@scene.selectedUnit.tile.top
 
-				$('.move', @el).click => @scene.controlState.switchTo "move"
-				$('.cancel', @el).click => @scene.controlState.switchTo "default"
+				$('.move', @menuEl).click => @scene.controlState.switchTo "move"
+				$('.cancel', @menuEl).click => @scene.controlState.switchTo "default"
 
 			update: ->
 				if input.pressed "mouse-right"
 					@scene.controlState.switchTo "default"
 
 			end: ->
-				@el.remove()
+				@cancelEl.remove()
+				@menuEl.remove()
 
 		class MoveState extends ControlState
 			begin: ->
