@@ -23,6 +23,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 					top:	@scene.selectedUnit.tile.top
 
 				$('.move', @el).click => @scene.controlState.switchTo "move"
+				$('.cancel', @el).click => @scene.controlState.switchTo "default"
 
 			update: ->
 				if input.pressed "mouse-right"
