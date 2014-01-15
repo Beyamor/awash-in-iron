@@ -75,7 +75,8 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 		class AttackState extends ControlState
 			begin: ->
 				@highlights	= []
-				@hittableTiles	= @scene.selectedUnit.tile.neighboursInRadius 5
+				@hittableTiles	= @scene.selectedUnit.tile.fov 5, (tile) ->
+							tile.unit? or not tile.isPassable
 
 				for tile in @hittableTiles
 					highlight = new levels.TileHighlight tile, defs.ATTACK_HIGHLIGHT_COLOR

@@ -16,10 +16,10 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 			@WIDTH:		64
 			@HEIGHT:	64
 
-			constructor: (@terrain, x, y) ->
+			constructor: (@level, @terrain, @gridX, @gridY) ->
 				super
-					x:		x * Tile.WIDTH
-					y:		y * Tile.HEIGHT
+					x:		@gridX * Tile.WIDTH
+					y:		@gridY * Tile.HEIGHT
 					width:		Tile.WIDTH
 					height:		Tile.HEIGHT
 					layer:		200
@@ -76,6 +76,29 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 
 				return closedList
 
+			fov: (range, isBlocker) ->
+				isBlocker or= -> false
+
+				neighbours	= @neighboursInRadius range
+				fov		= []
+
+				for neighbour in neighbours
+					ray = util.bresenham {x: @gridX, y: @gridY}, {x: neighbour.gridX, y: neighbour.gridY}
+
+					isBlocked = false
+					for {x: gridX, y: gridY} in ray
+						tile = @level.grid[gridX][gridY]
+						continue if tile is this or tile is neighbour
+
+						if isBlocker tile
+							isBlocked = true
+							break
+
+					unless isBlocked
+						fov.push neighbour
+
+				return fov
+
 			@properties
 				neighbours:
 					get: ->
@@ -117,7 +140,7 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 
 				@tiles	= []
 				@grid	= util.array2d ns.Level.WIDTH, ns.Level.HEIGHT, (x, y) =>
-						tile = new Tile util.random.any(terrainOptions), x, y
+						tile = new Tile this, util.random.any(terrainOptions), x, y
 						@tiles.push tile
 						return tile
 
