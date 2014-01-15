@@ -4,6 +4,10 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 	app) ->
 		ns = {}
 
+		defs = app.definitions
+		app.define
+			MOVE_HIGHLIGHT_COLOR:	"mediumSlateBlue"
+
 		class ControlState
 			constructor: (@scene) ->
 
@@ -44,7 +48,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 					tile.isPassable
 
 				for tile in @reachableTiles
-					highlight = new levels.TileHighlight tile
+					highlight = new levels.TileHighlight tile, defs.MOVE_HIGHLIGHT_COLOR
 					@scene.add highlight
 					@highlights.push highlight
 

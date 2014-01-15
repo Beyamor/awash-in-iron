@@ -65,7 +65,7 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 					get: -> @terrain.isPassable and not @unit?
 
 		class ns.TileHighlight extends Entity
-			constructor: (tile) ->
+			constructor: (tile, color) ->
 				margin = 6
 
 				super
@@ -77,7 +77,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 					graphic:	new gfx.Rect
 								width:		tile.width - margin
 								height:		tile.height - margin
-								color:		"rgba(119, 129, 237, 0.1)"
+								color:		color
+								alpha:		0.1
 
 				@centerX = tile.centerX
 				@centerY = tile.centerY
