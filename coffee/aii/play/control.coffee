@@ -7,6 +7,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 		defs = app.definitions
 		app.define
 			MOVE_HIGHLIGHT_COLOR:	"mediumSlateBlue"
+			ATTACK_HIGHLIGHT_COLOR:	"red"
 
 		class ControlState
 			constructor: (@scene) ->
@@ -31,6 +32,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 					top:	@scene.selectedUnit.tile.top
 
 				$('.move', @menuEl).click => @scene.controlState.switchTo "move"
+				$('.attack', @menuEl).click => @scene.controlState.switchTo "attack"
 				$('.cancel', @menuEl).click => @scene.controlState.switchTo "default"
 
 			update: ->
@@ -45,7 +47,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 			begin: ->
 				@highlights	= []
 				@reachableTiles	= levels.tilesAround @scene.selectedUnit.tile, 3, (tile) ->
-					tile.isPassable
+							tile.isPassable
 
 				for tile in @reachableTiles
 					highlight = new levels.TileHighlight tile, defs.MOVE_HIGHLIGHT_COLOR
@@ -65,6 +67,24 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 				for highlight in @highlights
 					@scene.remove highlight
 
+		class AttackState extends ControlState
+			begin: ->
+				@highlights	= []
+				@hittableTiles	= levels.tilesAround @scene.selectedUnit.tile, 5
+
+				for tile in @hittableTiles
+					highlight = new levels.TileHighlight tile, defs.ATTACK_HIGHLIGHT_COLOR
+					@scene.add highlight
+					@highlights.push highlight
+
+			update: ->
+				if input.pressed "mouse-right"
+					@scene.controlState.switchTo "default"
+
+			end: ->
+				for highlight in @highlights
+					@scene.remove highlight
+
 		ns.stateMachine = (scene) ->
 			return new StateMachine
 				initial: "default"
@@ -72,5 +92,6 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 					default:	new DefaultState scene
 					move:		new MoveState scene
 					selectAction:	new SelectActionState scene
+					attack:		new AttackState scene
 
 		return ns
