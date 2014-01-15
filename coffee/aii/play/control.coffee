@@ -51,7 +51,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 		class MoveState extends ControlState
 			begin: ->
 				@highlights	= []
-				@reachableTiles	= levels.tilesAround @scene.selectedUnit.tile, 3, (tile) ->
+				@reachableTiles	= @scene.selectedUnit.tile.neighboursInRadius 3, (tile) ->
 							tile.isPassable
 
 				for tile in @reachableTiles
@@ -75,7 +75,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 		class AttackState extends ControlState
 			begin: ->
 				@highlights	= []
-				@hittableTiles	= levels.tilesAround @scene.selectedUnit.tile, 5
+				@hittableTiles	= @scene.selectedUnit.tile.neighboursInRadius 5
 
 				for tile in @hittableTiles
 					highlight = new levels.TileHighlight tile, defs.ATTACK_HIGHLIGHT_COLOR
