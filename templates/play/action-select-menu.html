@@ -1,5 +1,5 @@
 <ul class="action-select-menu">
-	<li class="move">Move</li>
-	<li class="attack">Attack</li>
-	<li class="cancel">Cancel</li>
+	{{#each this}}
+	<li data-state="{{state}}">{{label}}</li>
+	{{/each}}
 </div>
