@@ -49,7 +49,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 			update: ->
 				if input.pressed "mouse-left"
-					unless @scene.mouseTile.unit?
+					if @reachableTiles.contains @scene.mouseTile
 						@scene.mouseTile.addUnit @scene.selectedUnit
 						@scene.controlState.switchTo "default"
 
