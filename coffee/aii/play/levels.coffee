@@ -46,7 +46,7 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 			removeUnit: ->
 				return unless @unit?
 
-				@unit.world.remove @unit if @unit.world?
+				@unit.scene.remove @unit if @unit.scene?
 				@unit.tile	= null
 				@unit		= null
 

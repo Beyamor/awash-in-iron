@@ -69,7 +69,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 						@scene.mouseTile.addUnit @scene.selectedUnit
 						@scene.controlState.switchTo "default"
 
-				if input.pressed "mouse-right"
+				else if input.pressed "mouse-right"
 					@scene.controlState.switchTo "default"
 
 			end: ->
@@ -91,7 +91,13 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 					@highlights.push highlight
 
 			update: ->
-				if input.pressed "mouse-right"
+				if input.pressed "mouse-left"
+					selectedTile = @scene.mouseTile
+					if @hittableTiles.contains(selectedTile) and selectedTile.unit?
+						selectedTile.removeUnit()
+						@scene.controlState.switchTo "default"
+
+				else if input.pressed "mouse-right"
 					@scene.controlState.switchTo "default"
 
 			end: ->
