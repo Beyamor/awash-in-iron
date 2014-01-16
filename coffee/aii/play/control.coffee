@@ -33,12 +33,16 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 				@menuEl = $(app.templates.compile "action-select-menu", options)
 				app.container.append @menuEl
-				@menuEl.offset
-					left:	@scene.selectedUnit.tile.left
-					top:	@scene.selectedUnit.tile.top
 
 				@menuEl.children().each (_, el) =>
 					$(el).click => @scene.controlState.switchTo $(el).data("state")
+
+				@repositionMenu()
+
+			repositionMenu: ->
+				@menuEl.offset
+					left:	@scene.selectedUnit.tile.left - @scene.camera.left
+					top:	@scene.selectedUnit.tile.top - @scene.camera.top
 
 			update: ->
 				if input.pressed "mouse-right"
