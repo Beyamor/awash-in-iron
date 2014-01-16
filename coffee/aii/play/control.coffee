@@ -80,7 +80,10 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 			begin: ->
 				@highlights	= []
 				@hittableTiles	= @scene.selectedUnit.tile.fov 5, (tile) ->
-							tile.unit? or not tile.isPassable
+							if tile.unit?
+								"partial"
+							else if not tile.isPassable
+								"full"
 
 				for tile in @hittableTiles
 					highlight = new levels.TileHighlight tile, defs.ATTACK_HIGHLIGHT_COLOR

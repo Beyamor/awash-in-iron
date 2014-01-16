@@ -45,6 +45,8 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				@level.grid[3][3].addUnit new Unit
 				@level.grid[5][3].addUnit new Unit
+				@level.grid[3][5].addUnit new Unit
+				@level.grid[5][5].addUnit new Unit
 
 			update: ->
 				super()

@@ -76,27 +76,96 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 
 				return closedList
 
-			fov: (range, isBlocker) ->
-				isBlocker or= -> false
+			fov: (radius, isBlocker) ->
+				#isBlocker or= -> false
+				#doFOV @level, @gridX, @gridY, radius, isBlocker
+				fov		= @neighboursInRadius radius
+				blocked		= []
 
-				neighbours	= @neighboursInRadius range
-				fov		= []
+				for blocker in fov when isBlocker blocker
+					blockType	= isBlocker blocker
+					dx		= blocker.gridX - @gridX
+					dy		= blocker.gridY - @gridY
+					blockerDistance	= Math.abs(dx) + Math.abs(dy)
 
-				for neighbour in neighbours
-					ray = util.bresenham {x: @gridX, y: @gridY}, {x: neighbour.gridX, y: neighbour.gridY}
+					# along east axis
+					if dy is 0 and dx > 0
+						x1	= blocker.left
+						y1	= blocker.top
+						x2	= blocker.left
+						y2	= blocker.bottom
 
-					isBlocked = false
-					for {x: gridX, y: gridY} in ray
-						tile = @level.grid[gridX][gridY]
-						continue if tile is this or tile is neighbour
+					# along west axis
+					else if dy is 0 and dx < 0
+						x1	= blocker.right
+						y1	= blocker.bottom
+						x2	= blocker.right
+						y2	= blocker.top
 
-						if isBlocker tile
-							isBlocked = true
-							break
+					# along south axis
+					else if dx is 0 and dy > 0
+						x1	= blocker.right
+						y1	= blocker.top
+						x2	= blocker.left
+						y2	= blocker.top
 
-					unless isBlocked
-						fov.push neighbour
+					# along north axis
+					else if dx is 0 and dy < 0
+						x1	= blocker.left
+						y1	= blocker.bottom
+						x2	= blocker.right
+						y2	= blocker.bottom
 
+					# north-east
+					else if dx > 0 and dy < 0
+						x1	= blocker.left
+						y1	= blocker.top
+						x2	= blocker.right
+						y2	= blocker.bottom
+
+					# north-west
+					else if dx < 0 and dy < 0
+						x1	= blocker.left
+						y1	= blocker.bottom
+						x2	= blocker.right
+						y2	= blocker.top
+
+					# south-east
+					else if dx > 0 and dy > 0
+						x1	= blocker.right
+						y1	= blocker.top
+						x2	= blocker.left
+						y2	= blocker.bottom
+
+					# south-west
+					else
+						x1	= blocker.right
+						y1	= blocker.bottom
+						x2	= blocker.left
+						y2	= blocker.top
+					
+					margin	= 0.01
+					lower	= (Math.atan2 y1 - @centerY, x1 - @centerX)
+					upper	= (Math.atan2 y2 - @centerY, x2 - @centerX)
+
+					if blockType is "partial"
+						lower += margin
+						upper -= margin
+					else
+						lower -= margin
+						upper += margin
+
+					for tile in fov when tile isnt blocker
+						distance = Math.abs(tile.gridX - @gridX) + Math.abs(tile.gridY - @gridY)
+						continue if distance <= blockerDistance
+
+						continue if blocked.contains tile
+
+						theta = Math.atan2 tile.centerY - @centerY, tile.centerX - @centerX
+						if util.isBetweenAngles theta, lower, upper
+							blocked.push tile
+
+				fov.remove(tile) for tile in blocked
 				return fov
 
 			@properties
@@ -105,7 +174,7 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 						unless @_neighbours?
 							@_neighbours = (neighbour for neighbour in [@north, @south, @east, @west]\
 										when neighbour?)
-						return @_neighbours
+						return @_neighbours.concat()
 
 				isPassable:
 					get: -> @terrain.isPassable and not @unit?
