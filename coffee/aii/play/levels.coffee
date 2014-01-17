@@ -223,6 +223,9 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 				x = Math.floor(pixelX / Tile.WIDTH)
 				y = Math.floor(pixelY / Tile.HEIGHT)
 
+				x = util.clamp x, 0, ns.Level.WIDTH - 1
+				y = util.clamp y, 0, ns.Level.HEIGHT - 1
+
 				return @grid[x][y]
 
 			@properties
