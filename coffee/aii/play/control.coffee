@@ -12,6 +12,15 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 		class ControlState
 			constructor: (@scene) ->
 
+			update: ->
+				if input.mouseMoved
+					if @scene.mouseTile.unit?
+						@showUnitInfo @scene.mouseTile.unit
+					else if @scene.selectedUnit?
+						@showUnitInfo @scene.selectedUnit
+					else
+						@removeInfo()
+
 			showUnitInfo: (unit) ->
 				@removeInfo()
 				@scene.infoPanel.html app.templates.compile('unit-info', unit)
@@ -20,10 +29,9 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 				@scene.infoPanel.empty()
 
 		class DefaultState extends ControlState
-			begin: ->
-				@removeInfo()
-
 			update: ->
+				super()
+
 				if input.pressed "mouse-left"
 					if @scene.mouseTile.unit?
 						@scene.selectedUnit = @scene.mouseTile.unit
@@ -49,14 +57,14 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 				@repositionMenu()
 
-				@showUnitInfo @scene.selectedUnit
-
 			repositionMenu: ->
 				@menuEl.offset
 					left:	@scene.selectedUnit.tile.left - @scene.space.camera.left
 					top:	@scene.selectedUnit.tile.top - @scene.space.camera.top
 
 			update: ->
+				super()
+
 				if input.pressed "mouse-right"
 					@scene.controlState.switchTo "default"
 
@@ -76,6 +84,8 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 					@highlights.push highlight
 
 			update: ->
+				super()
+
 				if input.pressed "mouse-left"
 					if @reachableTiles.contains @scene.mouseTile
 						@scene.mouseTile.addUnit @scene.selectedUnit
@@ -103,6 +113,8 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 					@highlights.push highlight
 
 			update: ->
+				super()
+
 				if input.pressed "mouse-left"
 					selectedTile = @scene.mouseTile
 					if @hittableTiles.contains(selectedTile) and selectedTile.unit?
