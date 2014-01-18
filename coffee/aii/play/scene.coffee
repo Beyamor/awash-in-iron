@@ -11,6 +11,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 		defs = app.definitions
 		app.define
 			CAMERA_PAN_SPEED:	700
+			INFO_PANEL_WIDTH:	200
 
 		class KeyCamera extends CameraWrapper
 			update: ->
@@ -39,9 +40,13 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 			begin: ->
 				super()
 
-				@canvas	= new Canvas width: defs.APP_WDITH, height: defs.APP_HEIGHT
-				@el	= @canvas.el
+				@canvas	= new Canvas width: app.width - defs.INFO_PANEL_WIDTH, height: app.height
 				app.container.append @canvas.el
+
+				@infoPanel = $ '<div class="info-panel">'
+				app.container.append @infoPanel
+
+				@els = [@canvas.el, @infoPanel]
 
 				@level = new Level
 

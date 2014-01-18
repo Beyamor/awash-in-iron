@@ -9,8 +9,14 @@ body {
 #game {
 	position: relative;
 
+	overflow: hidden;
+
 	.debug-screen {
 		position: absolute;
+	}
+
+	canvas {
+		display: block;
 	}
 }
 
