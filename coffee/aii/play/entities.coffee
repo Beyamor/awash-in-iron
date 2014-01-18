@@ -1,5 +1,7 @@
-define ["jinn/entities", "jinn/graphics"],
-	({Entity}, gfx) ->
+define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
+	"jinn/util"],
+	({Entity}, gfx, _,\
+	util) ->
 		ns = {}
 
 		class ns.Unit extends Entity
@@ -11,5 +13,8 @@ define ["jinn/entities", "jinn/graphics"],
 					centered:	true
 					width:		48
 					height:		48
+					mixins:
+						healthHaver:
+							maxHp:	util.random.intInRange 8, 11
 
 		return ns
