@@ -13,6 +13,7 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 				@maxHp		= random.any [8..11]
 				@strength	= random.any [2..10]
 				@speed		= random.any [2..5]
+				@range		= random.any [2..7]
 
 				super
 					graphic:	graphic
@@ -23,7 +24,6 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 						healthHaver:	true
 						attacker:	true
 						defender:	true
-						mover:		true
 
 			die: ->
 				@tile.removeUnit() if @tile?

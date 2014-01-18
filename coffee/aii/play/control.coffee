@@ -14,13 +14,16 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 			update: ->
 				if input.mouseMoved
-					if @scene.mouseTile.unit?
-						@showUnitInfo @scene.mouseTile.unit
-					else if @scene.selectedUnit?
-						@showUnitInfo @scene.selectedUnit
-					else
-						@removeInfo()
+					@updateInfo()
 
+			updateInfo: ->
+				if @scene.mouseTile.unit?
+					@showUnitInfo @scene.mouseTile.unit
+				else if @scene.selectedUnit?
+					@showUnitInfo @scene.selectedUnit
+				else
+					@removeInfo()
+					
 			showUnitInfo: (unit) ->
 				@removeInfo()
 				@scene.infoPanel.html app.templates.compile('unit-info', unit)
@@ -29,6 +32,9 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 				@scene.infoPanel.empty()
 
 		class DefaultState extends ControlState
+			begin: ->
+				@updateInfo()
+
 			update: ->
 				super()
 
@@ -101,7 +107,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 		class AttackState extends ControlState
 			begin: ->
 				@highlights	= []
-				@hittableTiles	= @scene.selectedUnit.tile.fov 5, (tile) ->
+				@hittableTiles	= @scene.selectedUnit.tile.fov @scene.selectedUnit.range, (tile) ->
 							if tile.unit?
 								"partial"
 							else if not tile.isPassable

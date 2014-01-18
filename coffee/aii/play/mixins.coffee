@@ -4,8 +4,6 @@ define ["jinn/mixins"],
 
 		mixins.define
 			healthHaver: ->
-				maxHp: 10
-
 				init: ->
 					@hp or= @maxHp
 
@@ -13,13 +11,8 @@ define ["jinn/mixins"],
 					@remove()
 
 			attacker: ->
-				strength: 10
-
 				attack: (other) ->
 					other.hit @strength
-
-			mover: ->
-				speed: 10
 
 			defender: ->
 				hit: (damage) ->
