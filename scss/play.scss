@@ -25,4 +25,12 @@
 	right: 0px;
 
 	background-color: black;
+
+	padding: 10px;
+
+	.unit-info {
+		.hp {
+			color: red;
+		}
+	}
 }
