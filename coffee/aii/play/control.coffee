@@ -13,12 +13,16 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 			constructor: (@scene) ->
 
 			showUnitInfo: (unit) ->
+				@removeInfo()
 				@scene.infoPanel.html app.templates.compile('unit-info', unit)
 
 			removeInfo: ->
 				@scene.infoPanel.empty()
 
 		class DefaultState extends ControlState
+			begin: ->
+				@removeInfo()
+
 			update: ->
 				if input.pressed "mouse-left"
 					if @scene.mouseTile.unit?
@@ -59,7 +63,6 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 			end: ->
 				@cancelEl.remove()
 				@menuEl.remove()
-				@removeInfo()
 
 		class MoveState extends ControlState
 			begin: ->
