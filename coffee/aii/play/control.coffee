@@ -75,7 +75,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 		class MoveState extends ControlState
 			begin: ->
 				@highlights	= []
-				@reachableTiles	= @scene.selectedUnit.tile.neighboursInRadius 3, (tile) ->
+				@reachableTiles	= @scene.selectedUnit.tile.neighboursInRadius @scene.selectedUnit.speed, (tile) ->
 							tile.isPassable
 
 				for tile in @reachableTiles
