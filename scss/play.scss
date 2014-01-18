@@ -18,15 +18,17 @@
 }
 
 .info-panel {
-	width: 200px;
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
 	right: 0px;
 
 	background-color: black;
+	
+	$padding: 10px;
 
-	padding: 10px;
+	padding: $padding;
+	width: 200px - 2 * $padding;
 
 	.unit-info {
 		.hp {
