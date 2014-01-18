@@ -8,4 +8,14 @@ define ["jinn/mixins"],
 					hp:	hp or maxHp
 					maxHp:	maxHp
 
+			attacker: ({strength}) ->
+				defaults:
+					strength:	strength
+					attack: (other) ->
+
+			mover: ({speed}) ->
+				defaults:
+					speed:		speed
+
+
 		return ns
