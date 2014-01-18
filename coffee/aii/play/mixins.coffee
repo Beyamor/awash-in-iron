@@ -3,19 +3,27 @@ define ["jinn/mixins"],
 		ns = {}
 
 		mixins.define
-			healthHaver: ({hp, maxHp}) ->
-				defaults:
-					hp:	hp or maxHp
-					maxHp:	maxHp
+			healthHaver: ->
+				maxHp: 10
 
-			attacker: ({strength}) ->
-				defaults:
-					strength:	strength
-					attack: (other) ->
+				init: ->
+					@hp or= @maxHp
 
-			mover: ({speed}) ->
-				defaults:
-					speed:		speed
+				die: ->
+					@remove()
 
+			attacker: ->
+				strength: 10
+
+				attack: (other) ->
+					other.hit @strength
+
+			mover: ->
+				speed: 10
+
+			defender: ->
+				hit: (damage) ->
+					@hp -= damage
+					@die() if @hp <= 0
 
 		return ns
