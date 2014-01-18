@@ -35,18 +35,18 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 
 				unit.tile	= this
 				@unit		= unit
-				@scene.add unit if @scene?
+				@space.add unit if @space?
 
 				unit.centerX = @centerX
 				unit.centerY = @centerY
 
 			added: ->
-				@scene.add @unit if @unit?
+				@space.add @unit if @unit?
 
 			removeUnit: ->
 				return unless @unit?
 
-				@unit.scene.remove @unit if @unit.scene?
+				@unit.space.remove @unit if @unit.space?
 				@unit.tile	= null
 				@unit		= null
 

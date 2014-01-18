@@ -41,8 +41,8 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 			repositionMenu: ->
 				@menuEl.offset
-					left:	@scene.selectedUnit.tile.left - @scene.camera.left
-					top:	@scene.selectedUnit.tile.top - @scene.camera.top
+					left:	@scene.selectedUnit.tile.left - @scene.space.camera.left
+					top:	@scene.selectedUnit.tile.top - @scene.space.camera.top
 
 			update: ->
 				if input.pressed "mouse-right"
@@ -60,7 +60,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 				for tile in @reachableTiles
 					highlight = new levels.TileHighlight tile, defs.MOVE_HIGHLIGHT_COLOR
-					@scene.add highlight
+					@scene.space.add highlight
 					@highlights.push highlight
 
 			update: ->
@@ -74,7 +74,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 			end: ->
 				for highlight in @highlights
-					@scene.remove highlight
+					highlight.remove()
 
 		class AttackState extends ControlState
 			begin: ->
@@ -87,7 +87,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 				for tile in @hittableTiles
 					highlight = new levels.TileHighlight tile, defs.ATTACK_HIGHLIGHT_COLOR
-					@scene.add highlight
+					@scene.space.add highlight
 					@highlights.push highlight
 
 			update: ->
@@ -102,7 +102,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 			end: ->
 				for highlight in @highlights
-					@scene.remove highlight
+					highlight.remove()
 
 		ns.stateMachine = (scene) ->
 			return new StateMachine

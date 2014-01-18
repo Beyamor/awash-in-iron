@@ -8,6 +8,10 @@ body {
 
 #game {
 	position: relative;
+
+	.debug-screen {
+		position: absolute;
+	}
 }
 
 .click-off-panel {

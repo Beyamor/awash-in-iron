@@ -1,9 +1,11 @@
 define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 	"jinn/input", "jinn/app", "jinn/debug/definitions",
-	"aii/play/entities", "aii/play/control"],
+	"aii/play/entities", "aii/play/control", "jinn/entities/spaces",
+	"jinn/canvas"],
 	({Scene}, {Level}, {CameraWrapper, BoundedCamera},\
 	input, app, definitionsDebug,\
-	{Unit}, control) ->
+	{Unit}, control, {EntitySpace},\
+	{Canvas}) ->
 		ns = {}
 
 		defs = app.definitions
@@ -37,11 +39,18 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 			begin: ->
 				super()
 
-				@level = new Level
-				@add tile for tile in @level.tiles
+				@canvas	= new Canvas width: defs.APP_WDITH, height: defs.APP_HEIGHT
+				@el	= @canvas.el
+				app.container.append @canvas.el
 
-				@camera = new BoundedCamera {left: 0, right: @level.pixelWidth, top: 0, bottom: @level.pixelWidth},
-						new KeyCamera @camera
+				@level = new Level
+
+				@space = new EntitySpace canvas: @canvas
+				@space.add tile for tile in @level.tiles
+
+				@space.camera = new BoundedCamera {left: 0, right: @level.pixelWidth,\
+									top: 0, bottom: @level.pixelWidth},
+						new KeyCamera @space.camera
 
 				@level.grid[3][3].addUnit new Unit
 				@level.grid[5][3].addUnit new Unit
@@ -55,9 +64,12 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				@controlState.update()
 
+				if input.pressed "vk_n"
+					app.scene = new ns.PlayScene
+
 			@properties
 				mouseTile:
-					get: -> @level.pixelToTile input.mouseX + @camera.x, input.mouseY + @camera.y
+					get: -> @level.pixelToTile input.mouseX + @space.camera.x, input.mouseY + @space.camera.y
 
 
 		return ns
