@@ -12,6 +12,12 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 		class ControlState
 			constructor: (@scene) ->
 
+			showUnitInfo: (unit) ->
+				@scene.infoPanel.html app.templates.compile('unit-info', unit)
+
+			removeInfo: ->
+				@scene.infoPanel.empty()
+
 		class DefaultState extends ControlState
 			update: ->
 				if input.pressed "mouse-left"
@@ -39,6 +45,8 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 				@repositionMenu()
 
+				@showUnitInfo @scene.selectedUnit
+
 			repositionMenu: ->
 				@menuEl.offset
 					left:	@scene.selectedUnit.tile.left - @scene.space.camera.left
@@ -51,6 +59,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 			end: ->
 				@cancelEl.remove()
 				@menuEl.remove()
+				@removeInfo()
 
 		class MoveState extends ControlState
 			begin: ->
