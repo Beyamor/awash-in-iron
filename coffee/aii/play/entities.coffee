@@ -1,14 +1,14 @@
 define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
-	"jinn/util"],
+	"jinn/util", "three"],
 	({Entity}, gfx, _,\
-	util) ->
+	util, THREE) ->
 		ns = {}
 
 		random = util.random
 
 		class ns.Unit extends Entity
 			constructor: (graphic) ->
-				graphic or= new gfx.Rect width: 48, height: 48, centered: true, color: "blue"
+				#graphic or= new gfx.Rect width: 48, height: 48, centered: true, color: "blue"
 
 				@maxHp		= random.any [8..11]
 				@strength	= random.any [2..10]
@@ -16,7 +16,7 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 				@range		= random.any [2..7]
 
 				super
-					graphic:	graphic
+					#graphic:	graphic
 					centered:	true
 					width:		48
 					height:		48
@@ -24,6 +24,10 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 						healthHaver:	true
 						attacker:	true
 						defender:	true
+
+				geometry	= new THREE.CubeGeometry 1, 1, 1
+				material	= new THREE.MeshBasicMaterial color: "red"
+				@model		= new THREE.Mesh geometry, material
 
 			die: ->
 				@tile.removeUnit() if @tile?

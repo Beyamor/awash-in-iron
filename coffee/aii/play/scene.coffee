@@ -11,11 +11,6 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 		defs = app.definitions
 		app.define
 			CAMERA_PAN_SPEED:	700
-			INFO_PANEL_WIDTH:	200
-
-		INFO_PANEL_WIDTH	= 200
-		ACTION_PANEL_WIDTH	= app.width - 200
-		ACTION_PANEL_HEIGHT	= app.height
 
 		class KeyCamera extends CameraWrapper
 			update: ->
@@ -42,18 +37,26 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@controlState = control.stateMachine this
 
 			begin: ->
+				INFO_PANEL_WIDTH	= 200
+				ACTION_PANEL_WIDTH	= app.width - 200
+				ACTION_PANEL_HEIGHT	= app.height
+
+
 				super()
 
-				scene		= new THREE.Scene
-				camera		= new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
-				renderer	= new THREE.WebGLRenderer
+				scene = new THREE.Scene
+
+				camera = new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
+				camera.position.z = 5
+
+				renderer = new THREE.WebGLRenderer
+				renderer.setSize ACTION_PANEL_WIDTH, ACTION_PANEL_HEIGHT
+				app.container.append renderer.domElement
 
 				@space = new EntitySpace
 						camera:		camera
 						entities:	new SceneEntityList
 						renderer:	new SceneRenderer renderer
-
-				app.container.append renderer.domElement
 
 				@infoPanel = $ '<div class="info-panel">'
 				app.container.append @infoPanel
@@ -61,13 +64,11 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@els = [renderer.domElement, @infoPanel]
 
 				@level = new Level
-
-				@space = new EntitySpace canvas: @canvas
 				@space.add tile for tile in @level.tiles
 
-				@space.camera = new BoundedCamera {left: 0, right: @level.pixelWidth,\
-									top: 0, bottom: @level.pixelWidth},
-						new KeyCamera @space.camera
+				#@space.camera = new BoundedCamera {left: 0, right: @level.pixelWidth,\
+				#					top: 0, bottom: @level.pixelWidth},
+				#		new KeyCamera @space.camera
 
 				@level.grid[3][3].addUnit new Unit
 				@level.grid[5][3].addUnit new Unit
@@ -86,7 +87,9 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 			@properties
 				mouseTile:
-					get: -> @level.pixelToTile input.mouseX + @space.camera.x, input.mouseY + @space.camera.y
+					# TODO account for camera offset
+					#get: -> @level.pixelToTile input.mouseX + @space.camera.x, input.mouseY + @space.camera.y
+					get: -> @level.pixelToTile input.mouseX, input.mouseY
 
 
 		return ns
