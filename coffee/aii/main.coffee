@@ -22,6 +22,9 @@ define ['jinn/app', 'jinn/debug', 'jinn/input',
 			"pan-up":	"vk_w"
 			"pan-down":	"vk_s"
 
+		app.define
+			RENDER_3D:	false
+
 		app.launch
 			id: "game"
 			width: 800

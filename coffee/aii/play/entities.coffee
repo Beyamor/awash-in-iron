@@ -1,10 +1,11 @@
 define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
-	"jinn/util", "three"],
+	"jinn/util", "three", "jinn/app"],
 	({Entity}, gfx, _,\
-	util, THREE) ->
+	util, THREE, app) ->
 		ns = {}
 
-		random = util.random
+		defs	= app.definitions
+		random	= util.random
 
 		class ns.Unit extends Entity
 			constructor: (graphic) ->
@@ -25,9 +26,10 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 						attacker:	true
 						defender:	true
 
-				#geometry	= new THREE.CubeGeometry 1, 1, 1
-				#material	= new THREE.MeshBasicMaterial color: "red"
-				#@model		= new THREE.Mesh geometry, material
+				if defs.RENDER_3D
+					geometry	= new THREE.CubeGeometry 1, 1, 1
+					material	= new THREE.MeshBasicMaterial color: "red"
+					@model		= new THREE.Mesh geometry, material
 
 			die: ->
 				@tile.removeUnit() if @tile?
