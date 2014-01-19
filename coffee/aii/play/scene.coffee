@@ -1,17 +1,21 @@
 define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 	"jinn/input", "jinn/app", "jinn/debug/definitions",
 	"aii/play/entities", "aii/play/control", "jinn/entities/spaces",
-	"jinn/canvas"],
+	"jinn/canvas", "aii/three", "three"],
 	({Scene}, {Level}, {CameraWrapper, BoundedCamera},\
 	input, app, definitionsDebug,\
 	{Unit}, control, {EntitySpace},\
-	{Canvas}) ->
+	{Canvas}, {SceneRenderer, SceneEntityList}, THREE) ->
 		ns = {}
 
 		defs = app.definitions
 		app.define
 			CAMERA_PAN_SPEED:	700
 			INFO_PANEL_WIDTH:	200
+
+		INFO_PANEL_WIDTH	= 200
+		ACTION_PANEL_WIDTH	= app.width - 200
+		ACTION_PANEL_HEIGHT	= app.height
 
 		class KeyCamera extends CameraWrapper
 			update: ->
@@ -40,13 +44,21 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 			begin: ->
 				super()
 
-				@canvas	= new Canvas width: app.width - defs.INFO_PANEL_WIDTH, height: app.height
-				app.container.append @canvas.el
+				scene		= new THREE.Scene
+				camera		= new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
+				renderer	= new THREE.WebGLRenderer
+
+				@space = new EntitySpace
+						camera:		camera
+						entities:	new SceneEntityList
+						renderer:	new SceneRenderer renderer
+
+				app.container.append renderer.domElement
 
 				@infoPanel = $ '<div class="info-panel">'
 				app.container.append @infoPanel
 
-				@els = [@canvas.el, @infoPanel]
+				@els = [renderer.domElement, @infoPanel]
 
 				@level = new Level
 

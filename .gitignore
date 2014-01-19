@@ -1,4 +1,4 @@
-*.swp
+*.sw[op]
 js
 coffee/jinn
 css
