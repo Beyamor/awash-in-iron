@@ -1,5 +1,5 @@
-define ["jinn/entities/lists", "three"],
-	({SimpleEntityList}, THREE) ->
+define ["jinn/entities/lists", "three", "jinn/cameras"],
+	({SimpleEntityList}, THREE, {Camera}) ->
 		ns = {}
 
 		ns.RENDER_SCALE = RENDER_SCALE = 0.01
@@ -9,8 +9,8 @@ define ["jinn/entities/lists", "three"],
 
 			render: (entities, camera) ->
 				for entity in entities.list when entity.model?
-					entity.model.position.x = entity.x * RENDER_SCALE
-					entity.model.position.y = entity.y * RENDER_SCALE
+					entity.model.position.x = entity.x# * RENDER_SCALE
+					entity.model.position.y = entity.y# * RENDER_SCALE
 
 				@renderer.render @scene, camera
 

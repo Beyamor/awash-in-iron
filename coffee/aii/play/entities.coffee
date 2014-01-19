@@ -27,7 +27,7 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 						defender:	true
 
 				if defs.RENDER_3D
-					geometry	= new THREE.CubeGeometry 1, 1, 1
+					geometry	= new THREE.CubeGeometry 1, 1, 2
 					material	= new THREE.MeshBasicMaterial color: "red"
 					@model		= new THREE.Mesh geometry, material
 

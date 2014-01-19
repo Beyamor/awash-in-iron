@@ -1,15 +1,21 @@
-define ["jinn/util", "jinn/entities", "jinn/graphics"],
-	(util, {Entity}, gfx) ->
+define ["jinn/util", "jinn/entities", "jinn/graphics",
+	"jinn/app"],
+	(util, {Entity}, gfx,\
+	app) ->
 		ns = {}
+
+		defs = app.definitions
 
 		terrains = {
 			dirt:
 				color:		"#E0D294"
 				isPassable:	true
+				height:		1
 
 			rock:
 				color:		"#47473C"
 				isPassable:	false
+				height:		1.5
 		}
 
 		class Tile extends Entity
@@ -18,8 +24,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 
 			constructor: (@level, @terrain, @gridX, @gridY) ->
 				super
-					x:		@gridX * Tile.WIDTH
-					y:		@gridY * Tile.HEIGHT
+					x:		@gridX * (if defs.RENDER_3D then 1 else Tile.WIDTH)
+					y:		@gridY * (if defs.RENDER_3D then 1 else Tile.HEIGHT)
 					width:		Tile.WIDTH
 					height:		Tile.HEIGHT
 					layer:		200
@@ -27,6 +33,11 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 								width:	Tile.WIDTH
 								height:	Tile.HEIGHT
 								color:	@terrain.color
+
+				if defs.RENDER_3D
+					geometry	= new THREE.CubeGeometry 1, 1, @terrain.height
+					material	= new THREE.MeshBasicMaterial color: @terrain.color
+					@model		= new THREE.Mesh geometry, material
 
 			addUnit: (unit) ->
 				throw new Error "Tiles already contains a unit" if @unit?
@@ -37,8 +48,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics"],
 				@unit		= unit
 				@space.add unit if @space?
 
-				unit.centerX = @centerX
-				unit.centerY = @centerY
+				unit.x = @x
+				unit.y = @y
 
 			added: ->
 				@space.add @unit if @unit?

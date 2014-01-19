@@ -100,6 +100,10 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				if input.pressed "vk_n"
 					app.scene = new ns.PlayScene
 
+				if input.isDown "mouse-left"
+					@space.camera.rotation.y += (input.mouseX - input.prevMouseX) / 1000
+					@space.camera.rotation.x += (input.mouseY - input.prevMouseY) / 1000
+
 			@properties
 				mouseTile:
 					get: ->
