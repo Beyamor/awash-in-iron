@@ -2,7 +2,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 	"jinn/input", "jinn/app", "jinn/debug/definitions",
 	"aii/play/entities", "aii/play/control", "jinn/entities/spaces",
 	"jinn/canvas", "aii/three", "three"],
-	({Scene}, {Level}, {CameraWrapper, BoundedCamera},\
+	({Scene}, {Level}, cams,\
 	input, app, definitionsDebug,\
 	{Unit}, control, {EntitySpace},\
 	{Canvas}, {SceneRenderer, SceneEntityList}, THREE) ->
@@ -12,7 +12,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 		app.define
 			CAMERA_PAN_SPEED:	700
 
-		class KeyCamera extends CameraWrapper
+		class KeyCamera extends cams.CameraWrapper
 			update: ->
 				super()
 
@@ -44,39 +44,50 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				super()
 
-				scene = new THREE.Scene
+				#
+				#	THREE.JS STUFF
+				#
+				#scene = new THREE.Scene
 
-				camera = new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
+				#camera = new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
 
-				renderer = new THREE.WebGLRenderer
-				renderer.setSize ACTION_PANEL_WIDTH, ACTION_PANEL_HEIGHT
-				app.container.append renderer.domElement
+				#renderer = new THREE.WebGLRenderer
+				#renderer.setSize ACTION_PANEL_WIDTH, ACTION_PANEL_HEIGHT
+				#app.container.append renderer.domElement
+
+				#@space = new EntitySpace
+				#		camera:		camera
+				#		entities:	new SceneEntityList scene
+				#		renderer:	new SceneRenderer scene, renderer
+				#camera.position.z = 20
+				#camera.position.x = @level.pixelWidth / 2 / 100
+				#camera.position.y = @level.pixelHeight / 2 / 100
+
+				#
+				#	CANVAS STUFF
+				#
+				canvas = new Canvas width: ACTION_PANEL_WIDTH, height: ACTION_PANEL_HEIGHT
+				app.container.append canvas.el
 
 				@space = new EntitySpace
-						camera:		camera
-						entities:	new SceneEntityList scene
-						renderer:	new SceneRenderer scene, renderer
+						canvas:	canvas
 
 				@infoPanel = $ '<div class="info-panel">'
 				app.container.append @infoPanel
 
-				@els = [renderer.domElement, @infoPanel]
+				@els = [canvas.el, @infoPanel]
 
 				@level = new Level
 				@space.add tile for tile in @level.tiles
-
-				#@space.camera = new BoundedCamera {left: 0, right: @level.pixelWidth,\
-				#					top: 0, bottom: @level.pixelWidth},
-				#		new KeyCamera @space.camera
 
 				@level.grid[3][3].addUnit new Unit
 				@level.grid[5][3].addUnit new Unit
 				@level.grid[3][5].addUnit new Unit
 				@level.grid[5][5].addUnit new Unit
 
-				camera.position.z = 20
-				camera.position.x = @level.pixelWidth / 2 / 100
-				camera.position.y = @level.pixelHeight / 2 / 100
+				@space.camera = new cams.BoundedCamera {left: 0, right: @level.pixelWidth,\
+									top: 0, bottom: @level.pixelWidth},
+							new KeyCamera @space.camera
 
 			update: ->
 				super()
@@ -90,9 +101,9 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 			@properties
 				mouseTile:
+					get: -> @level.pixelToTile input.mouseX + @space.camera.x, input.mouseY + @space.camera.y
 					# TODO account for camera offset
-					#get: -> @level.pixelToTile input.mouseX + @space.camera.x, input.mouseY + @space.camera.y
-					get: -> @level.pixelToTile input.mouseX, input.mouseY
+					#get: -> @level.pixelToTile input.mouseX, input.mouseY
 
 
 		return ns
