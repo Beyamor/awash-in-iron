@@ -47,7 +47,6 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				scene = new THREE.Scene
 
 				camera = new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
-				camera.position.z = 5
 
 				renderer = new THREE.WebGLRenderer
 				renderer.setSize ACTION_PANEL_WIDTH, ACTION_PANEL_HEIGHT
@@ -74,6 +73,10 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@level.grid[5][3].addUnit new Unit
 				@level.grid[3][5].addUnit new Unit
 				@level.grid[5][5].addUnit new Unit
+
+				camera.position.z = 20
+				camera.position.x = @level.pixelWidth / 2 / 100
+				camera.position.y = @level.pixelHeight / 2 / 100
 
 			update: ->
 				super()
