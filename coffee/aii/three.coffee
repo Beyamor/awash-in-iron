@@ -2,13 +2,15 @@ define ["jinn/entities/lists", "three"],
 	({SimpleEntityList}, THREE) ->
 		ns = {}
 
+		ns.RENDER_SCALE = RENDER_SCALE = 0.01
+
 		class ns.SceneRenderer
 			constructor: (@scene, @renderer) ->
 
 			render: (entities, camera) ->
 				for entity in entities.list when entity.model?
-					entity.model.position.x = entity.x / 100
-					entity.model.position.y = entity.y / 100
+					entity.model.position.x = entity.x * RENDER_SCALE
+					entity.model.position.y = entity.y * RENDER_SCALE
 
 				@renderer.render @scene, camera
 

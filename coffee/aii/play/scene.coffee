@@ -5,7 +5,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 	({Scene}, {Level}, cams,\
 	input, app, definitionsDebug,\
 	{Unit}, control, {EntitySpace},\
-	{Canvas}, {SceneRenderer, SceneEntityList}, THREE) ->
+	{Canvas}, {SceneRenderer, SceneEntityList, RENDER_SCALE}, THREE) ->
 		ns = {}
 
 		defs = app.definitions
@@ -83,8 +83,8 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				if defs.RENDER_3D
 					camera.position.z = 20
-					camera.position.x = @level.pixelWidth / 2 / 100
-					camera.position.y = @level.pixelHeight / 2 / 100
+					camera.position.x = @level.pixelWidth / 2 * RENDER_SCALE
+					camera.position.y = @level.pixelHeight / 2 * RENDER_SCALE
 				else
 					@space.camera = new cams.BoundedCamera {left: 0, right: @level.pixelWidth,\
 										top: 0, bottom: @level.pixelWidth},
