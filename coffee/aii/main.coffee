@@ -23,7 +23,7 @@ define ['jinn/app', 'jinn/debug', 'jinn/input',
 			"pan-down":	"vk_s"
 
 		app.define
-			RENDER_3D:	true
+			RENDER_3D:	false
 
 		app.launch
 			id: "game"

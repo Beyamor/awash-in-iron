@@ -48,8 +48,12 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 				@unit		= unit
 				@space.add unit if @space?
 
-				unit.x = @x
-				unit.y = @y
+				if defs.RENDER_3D
+					unit.x = @x
+					unit.y = @y
+				else
+					unit.centerX = @centerX
+					unit.centerY = @centerY
 
 			added: ->
 				@space.add @unit if @unit?
