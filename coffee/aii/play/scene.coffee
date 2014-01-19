@@ -54,8 +54,8 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				@space = new EntitySpace
 						camera:		camera
-						entities:	new SceneEntityList
-						renderer:	new SceneRenderer renderer
+						entities:	new SceneEntityList scene
+						renderer:	new SceneRenderer scene, renderer
 
 				@infoPanel = $ '<div class="info-panel">'
 				app.container.append @infoPanel

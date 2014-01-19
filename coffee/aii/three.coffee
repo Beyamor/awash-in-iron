@@ -3,20 +3,18 @@ define ["jinn/entities/lists", "three"],
 		ns = {}
 
 		class ns.SceneRenderer
-			constructor: (@renderer) ->
+			constructor: (@scene, @renderer) ->
 
 			render: (entities, camera) ->
 				for entity in entities.list when entity.model?
 					entity.model.position.x = entity.x / 100
 					entity.model.position.y = entity.y / 100
-					"do nothing"
 
-				@renderer.render entities.scene, camera
+				@renderer.render @scene, camera
 
 		class ns.SceneEntityList extends SimpleEntityList
-			constructor: ->
+			constructor: (@scene) ->
 				super()
-				@scene = new THREE.Scene
 
 			add: (e) ->
 				super e
