@@ -24,8 +24,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 
 			constructor: (@level, @terrain, @gridX, @gridY) ->
 				super
-					x:		@gridX * (if defs.RENDER_3D then 1 else Tile.WIDTH)
-					y:		@gridY * (if defs.RENDER_3D then 1 else Tile.HEIGHT)
+					x:		@gridX
+					y:		@gridY
 					width:		Tile.WIDTH
 					height:		Tile.HEIGHT
 					layer:		200
@@ -34,10 +34,9 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 								height:	Tile.HEIGHT
 								color:	@terrain.color
 
-				if defs.RENDER_3D
-					geometry	= new THREE.CubeGeometry 1, 1, @terrain.height
-					material	= new THREE.MeshBasicMaterial color: @terrain.color
-					@model		= new THREE.Mesh geometry, material
+				geometry	= new THREE.CubeGeometry 1, 1, @terrain.height
+				material	= new THREE.MeshBasicMaterial color: @terrain.color
+				@model		= new THREE.Mesh geometry, material
 
 			addUnit: (unit) ->
 				throw new Error "Tiles already contains a unit" if @unit?
@@ -48,12 +47,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 				@unit		= unit
 				@space.add unit if @space?
 
-				if defs.RENDER_3D
-					unit.x = @x
-					unit.y = @y
-				else
-					unit.centerX = @centerX
-					unit.centerY = @centerY
+				unit.x = @x
+				unit.y = @y
 
 			added: ->
 				@space.add @unit if @unit?

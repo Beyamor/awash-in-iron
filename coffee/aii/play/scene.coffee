@@ -9,9 +9,8 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 		ns = {}
 
 		defs = app.definitions
-		app.whenDefined "RENDER_3D", ->
-			app.define
-				CAMERA_PAN_SPEED:	(if defs.RENDER_3D then 10 else 700)
+		app.define
+			CAMERA_PAN_SPEED:	10
 
 		class KeyCamera extends cams.CameraWrapper
 			update: ->
@@ -45,38 +44,27 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				super()
 
-				if defs.RENDER_3D
-					scene = new THREE.Scene
+				scene = new THREE.Scene
 
-					camera = new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
-					scene.add camera
-					@camera = camera
+				camera = new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
+				scene.add camera
+				@camera = camera
 
-					renderer = new THREE.WebGLRenderer
-					renderer.setSize ACTION_PANEL_WIDTH, ACTION_PANEL_HEIGHT
-					app.container.append renderer.domElement
+				renderer = new THREE.WebGLRenderer
+				renderer.setSize ACTION_PANEL_WIDTH, ACTION_PANEL_HEIGHT
+				app.container.append renderer.domElement
 
-					@space = new EntitySpace
-							camera:		new KeyCamera(
-										new SceneCamera camera
-							)
-							entities:	new SceneEntityList scene
-							renderer:	new SceneRenderer scene, renderer, camera
-
-				else
-					canvas = new Canvas width: ACTION_PANEL_WIDTH, height: ACTION_PANEL_HEIGHT
-					app.container.append canvas.el
-
-					@space = new EntitySpace
-							canvas:	canvas
+				@space = new EntitySpace
+						camera:		new KeyCamera(
+									new SceneCamera camera
+						)
+						entities:	new SceneEntityList scene
+						renderer:	new SceneRenderer scene, renderer, camera
 
 				@infoPanel = $ '<div class="info-panel">'
 				app.container.append @infoPanel
 
-				if defs.RENDER_3D
-					@els = [renderer.domElement, @infoPanel]
-				else
-					@els = [canvas.el, @infoPanel]
+				@els = [renderer.domElement, @infoPanel]
 
 				@level = new Level
 				@space.add tile for tile in @level.tiles
@@ -86,16 +74,11 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@level.grid[3][5].addUnit new Unit
 				@level.grid[5][5].addUnit new Unit
 
-				if defs.RENDER_3D
-					camera.position.z = 5
-					camera.position.x = @level.pixelWidth / 2 * RENDER_SCALE
-					camera.position.y = 0 #@level.pixelHeight / 2 * RENDER_SCALE
-					camera.rotation.order = "ZYX"
-					camera.rotation.x += 0.5
-				else
-					@space.camera = new cams.BoundedCamera {left: 0, right: @level.pixelWidth,\
-										top: 0, bottom: @level.pixelWidth},
-								new KeyCamera @space.camera
+				camera.position.z = 6
+				camera.position.x = @level.pixelWidth / 2 * RENDER_SCALE
+				camera.position.y = 0 #@level.pixelHeight / 2 * RENDER_SCALE
+				camera.rotation.order = "ZYX"
+				camera.rotation.x += 0.7
 
 			update: ->
 				super()
@@ -107,24 +90,15 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				if input.pressed "vk_n"
 					app.scene = new ns.PlayScene
 
-				#if input.isDown "mouse-left"
-				#	@space.camera.rotation.y += (input.mouseX - input.prevMouseX) / 1000
-				#	@space.camera.rotation.x += (input.mouseY - input.prevMouseY) / 1000
-				
-				if defs.RENDER_3D
-					if input.isDown "rot-right"
-						@camera.rotation.z += 0.1
-					else if input.isDown "rot-left"
-						@camera.rotation.z -= 0.1
+				if input.isDown "rot-right"
+					@camera.rotation.z += 0.1
+				else if input.isDown "rot-left"
+					@camera.rotation.z -= 0.1
 
 			@properties
 				mouseTile:
 					get: ->
-						if defs.RENDER_3D
-							# TODO account for camera offset
-							@level.pixelToTile input.mouseX, input.mouseY
-						else
-							@level.pixelToTile input.mouseX + @space.camera.x,
-										input.mouseY + @space.camera.y
+						# TODO account for camera offset
+						@level.pixelToTile input.mouseX, input.mouseY
 
 		return ns

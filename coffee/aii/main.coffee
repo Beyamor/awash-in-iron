@@ -24,9 +24,6 @@ define ['jinn/app', 'jinn/debug', 'jinn/input',
 			"rot-right":	"vk_e"
 			"rot-left":	"vk_q"
 
-		app.define
-			RENDER_3D:	true
-
 		app.launch
 			id: "game"
 			width: 800

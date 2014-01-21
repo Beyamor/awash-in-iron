@@ -26,10 +26,9 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 						attacker:	true
 						defender:	true
 
-				if defs.RENDER_3D
-					geometry	= new THREE.CubeGeometry 0.75, 0.75, 2
-					material	= new THREE.MeshBasicMaterial color: "red"
-					@model		= new THREE.Mesh geometry, material
+				geometry	= new THREE.CubeGeometry 0.75, 0.75, 2
+				material	= new THREE.MeshBasicMaterial color: "red"
+				@model		= new THREE.Mesh geometry, material
 
 			die: ->
 				@tile.removeUnit() if @tile?
