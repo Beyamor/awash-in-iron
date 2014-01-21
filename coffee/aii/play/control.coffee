@@ -17,8 +17,10 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 					@updateInfo()
 
 			updateInfo: ->
-				if @scene.mouseTile.unit?
-					@showUnitInfo @scene.mouseTile.unit
+				mouseTile = @scene.mouseTile
+
+				if mouseTile? and mouseTile.unit?
+					@showUnitInfo mouseTile.unit
 				else if @scene.selectedUnit?
 					@showUnitInfo @scene.selectedUnit
 				else
@@ -39,8 +41,9 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 				super()
 
 				if input.pressed "mouse-left"
-					if @scene.mouseTile.unit?
-						@scene.selectedUnit = @scene.mouseTile.unit
+					mouseTile = @scene.mouseTile
+					if mouseTile? and mouseTile.unit?
+						@scene.selectedUnit = mouseTile.unit
 						@scene.controlState.switchTo "selectAction"
 
 		class SelectActionState extends ControlState
@@ -93,8 +96,9 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 				super()
 
 				if input.pressed "mouse-left"
-					if @reachableTiles.contains @scene.mouseTile
-						@scene.mouseTile.addUnit @scene.selectedUnit
+					mouseTile = @scene.mouseTile
+					if mouseTile? and @reachableTiles.contains mouseTile
+						mouseTile.addUnit @scene.selectedUnit
 						@scene.controlState.switchTo "default"
 
 				else if input.pressed "mouse-right"
@@ -123,7 +127,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 				if input.pressed "mouse-left"
 					selectedTile = @scene.mouseTile
-					if @hittableTiles.contains(selectedTile) and selectedTile.unit?
+					if selectedTile? and @hittableTiles.contains(selectedTile) and selectedTile.unit?
 						@scene.selectedUnit.attack selectedTile.unit
 						@scene.controlState.switchTo "default"
 

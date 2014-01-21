@@ -37,6 +37,7 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 				geometry	= new THREE.CubeGeometry 1, 1, @terrain.height
 				material	= new THREE.MeshBasicMaterial color: @terrain.color
 				@model		= new THREE.Mesh geometry, material
+				@model.tile	= this
 
 			addUnit: (unit) ->
 				throw new Error "Tiles already contains a unit" if @unit?

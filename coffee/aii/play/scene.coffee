@@ -9,10 +9,14 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 		ns = {}
 
 		defs = app.definitions
-		app.define
-			CAMERA_PAN_SPEED:	10
-			CAMERA_HEIGHT:		7
-			CAMERA_ANGLE:		0.5
+		app.onLaunch ->
+			app.define
+				CAMERA_ANGLE:		0.5
+				CAMERA_HEIGHT:		7
+				CAMERA_PAN_SPEED:	10
+				INFO_PANEL_WIDTH:	200
+				ACTION_PANEL_WIDTH:	app.width - 200
+				ACTION_PANEL_HEIGHT:	app.height
 
 		class KeyCamera extends cams.CameraWrapper
 			update: ->
@@ -33,27 +37,26 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@y += dy * defs.CAMERA_PAN_SPEED * app.elapsed
 
 		class ns.PlayScene extends Scene
+			
 			constructor: ->
 				super()
 
 				@controlState = control.stateMachine this
 
 			begin: ->
-				INFO_PANEL_WIDTH	= 200
-				ACTION_PANEL_WIDTH	= app.width - 200
-				ACTION_PANEL_HEIGHT	= app.height
 
 
 				super()
 
 				scene = new THREE.Scene
+				@scene = scene
 
-				camera = new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
+				camera = new THREE.PerspectiveCamera 75, defs.ACTION_PANEL_WIDTH / defs.ACTION_PANEL_HEIGHT, 0.1, 1000
 				scene.add camera
 				@camera = camera
 
 				renderer = new THREE.WebGLRenderer
-				renderer.setSize ACTION_PANEL_WIDTH, ACTION_PANEL_HEIGHT
+				renderer.setSize defs.ACTION_PANEL_WIDTH, defs.ACTION_PANEL_HEIGHT
 				app.container.append renderer.domElement
 
 				@space = new EntitySpace
@@ -101,7 +104,25 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 			@properties
 				mouseTile:
 					get: ->
-						# TODO account for camera offset
-						@level.pixelToTile input.mouseX, input.mouseY
+						{mouseX, mouseY} = input
+						return null if mouseX < 0 or mouseY < 0 or
+							mouseX >= defs.ACTION_PANEL_WIDTH or mouseY >= defs.ACTION_PANEL_HEIGHT
+
+						mouseX		= (mouseX - defs.ACTION_PANEL_WIDTH / 2) /
+									( defs.ACTION_PANEL_WIDTH / 2)
+						mouseY		= (mouseY - defs.ACTION_PANEL_HEIGHT / 2) /
+									(defs.ACTION_PANEL_HEIGHT / 2) * -1
+						mouseCoords	= new THREE.Vector3 mouseX, mouseY, 0
+						projector	= new THREE.Projector
+						ray		= projector.pickingRay mouseCoords, @camera
+						objects		= ray.intersectObjects @scene.children
+
+						return null unless objects.length?
+
+						for object in objects
+							object = object.object
+							return object.tile if object.tile?
+
+						return null
 
 		return ns
