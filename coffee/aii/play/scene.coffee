@@ -9,8 +9,9 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 		ns = {}
 
 		defs = app.definitions
-		app.define
-			CAMERA_PAN_SPEED:	700
+		app.whenDefined "RENDER_3D", ->
+			app.define
+				CAMERA_PAN_SPEED:	(if defs.RENDER_3D then 10 else 700)
 
 		class KeyCamera extends cams.CameraWrapper
 			update: ->
@@ -55,10 +56,12 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 					app.container.append renderer.domElement
 
 					@space = new EntitySpace
-							camera:		new SceneCamera camera
+							camera:		new KeyCamera(
+										new SceneCamera camera
+							)
 							entities:	new SceneEntityList scene
 							renderer:	new SceneRenderer scene, renderer, camera
-					
+
 				else
 					canvas = new Canvas width: ACTION_PANEL_WIDTH, height: ACTION_PANEL_HEIGHT
 					app.container.append canvas.el
