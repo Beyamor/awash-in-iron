@@ -11,6 +11,8 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 		defs = app.definitions
 		app.define
 			CAMERA_PAN_SPEED:	10
+			CAMERA_HEIGHT:		7
+			CAMERA_ANGLE:		0.5
 
 		class KeyCamera extends cams.CameraWrapper
 			update: ->
@@ -74,11 +76,9 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@level.grid[3][5].addUnit new Unit
 				@level.grid[5][5].addUnit new Unit
 
-				camera.position.z = 6
 				camera.position.x = @level.pixelWidth / 2 * RENDER_SCALE
 				camera.position.y = 0 #@level.pixelHeight / 2 * RENDER_SCALE
 				camera.rotation.order = "ZYX"
-				camera.rotation.x += 0.7
 
 			update: ->
 				super()
@@ -94,6 +94,9 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 					@camera.rotation.z += 0.1
 				else if input.isDown "rot-left"
 					@camera.rotation.z -= 0.1
+
+				@camera.position.z	= defs.CAMERA_HEIGHT
+				@camera.rotation.x	= defs.CAMERA_ANGLE
 
 			@properties
 				mouseTile:
