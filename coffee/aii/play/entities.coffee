@@ -25,7 +25,7 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 						defender:	true
 
 				geometry	= new THREE.CubeGeometry 0.75, 0.75, 2
-				material	= new THREE.MeshBasicMaterial color: "blue"
+				material	= new THREE.MeshLambertMaterial color: "blue", ambient: "blue"
 				@model		= new THREE.Mesh geometry, material
 
 			die: ->

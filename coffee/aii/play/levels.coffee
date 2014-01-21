@@ -8,12 +8,12 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 
 		terrains = {
 			dirt:
-				color:		"#E0D294"
+				color:		0xE0D294
 				isPassable:	true
 				height:		1
 
 			rock:
-				color:		"#47473C"
+				color:		0x47473C
 				isPassable:	false
 				height:		1.5
 		}
@@ -32,7 +32,7 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 					centered:	true
 
 				geometry	= new THREE.CubeGeometry 1, 1, @terrain.height
-				material	= new THREE.MeshBasicMaterial color: @terrain.color
+				material	= new THREE.MeshLambertMaterial color: @terrain.color, ambient: @terrain.color
 				@model		= new THREE.Mesh geometry, material
 				@model.tile	= this
 
@@ -203,7 +203,7 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 				@y = tile.y
 
 				geometry	= new THREE.CubeGeometry 0.9, 0.9, 1.25
-				material	= new THREE.MeshBasicMaterial color: color
+				material	= new THREE.MeshLambertMaterial color: color, ambient: color
 				@model		= new THREE.Mesh geometry, material
 
 		class ns.Level

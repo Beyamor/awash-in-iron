@@ -83,6 +83,13 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				camera.position.y = 0 #@level.pixelHeight / 2 * RENDER_SCALE
 				camera.rotation.order = "ZYX"
 
+				light = new THREE.AmbientLight 0x404040
+				scene.add light
+
+				light = new THREE.DirectionalLight 0xd0d0d0
+				light.position.set(@level.pixelWidth/2, @level.pixelHeight/2, 10).normalize()
+				scene.add light
+
 			update: ->
 				super()
 
