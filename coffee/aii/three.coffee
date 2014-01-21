@@ -19,15 +19,17 @@ define ["jinn/entities/lists", "three", "jinn/cameras",
 						@camera.position.x * Math.cos(-@theta) + @camera.position.y * -Math.sin(-@theta)
 
 					set: (x) ->
-						@camera.position.x = x * Math.cos(@theta) + @y * -Math.sin(@theta)
-						@camera.position.y = x * Math.sin(@theta) + @y * Math.cos(@theta)
+						oldY = @y
+						@camera.position.x = x * Math.cos(@theta) + oldY * -Math.sin(@theta)
+						@camera.position.y = x * Math.sin(@theta) + oldY * Math.cos(@theta)
 				y:
 					get: ->
 						@camera.position.x * Math.sin(-@theta) + @camera.position.y * Math.cos(-@theta)
 
 					set: (y) ->
-						@camera.position.x = @x * Math.cos(@theta) + y * -Math.sin(@theta)
-						@camera.position.y = @x * Math.sin(@theta) + y * Math.cos(@theta)
+						oldX = @x
+						@camera.position.x = oldX * Math.cos(@theta) + y * -Math.sin(@theta)
+						@camera.position.y = oldX * Math.sin(@theta) + y * Math.cos(@theta)
 
 		class ns.SceneCamera extends Camera
 			constructor: (camera) ->
