@@ -19,8 +19,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 		}
 
 		class Tile extends Entity
-			@WIDTH:		64
-			@HEIGHT:	64
+			@WIDTH:		1
+			@HEIGHT:	1
 
 			constructor: (@level, @terrain, @gridX, @gridY) ->
 				super
@@ -29,10 +29,7 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 					width:		Tile.WIDTH
 					height:		Tile.HEIGHT
 					layer:		200
-					graphic:	new gfx.Rect
-								width:	Tile.WIDTH
-								height:	Tile.HEIGHT
-								color:	@terrain.color
+					centered:	true
 
 				geometry	= new THREE.CubeGeometry 1, 1, @terrain.height
 				material	= new THREE.MeshBasicMaterial color: @terrain.color
@@ -200,14 +197,14 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 					width:		tile.width - margin
 					height:		tile.height - margin
 					layer:		tile.layer - 1
-					graphic:	new gfx.Rect
-								width:		tile.width - margin
-								height:		tile.height - margin
-								color:		color
-								alpha:		0.1
+					centered:	true
 
-				@centerX = tile.centerX
-				@centerY = tile.centerY
+				@x = tile.x
+				@y = tile.y
+
+				geometry	= new THREE.CubeGeometry 0.9, 0.9, 1.25
+				material	= new THREE.MeshBasicMaterial color: color
+				@model		= new THREE.Mesh geometry, material
 
 		class ns.Level
 			@WIDTH:		16

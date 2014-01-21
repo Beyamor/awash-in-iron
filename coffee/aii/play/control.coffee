@@ -6,8 +6,8 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 		defs = app.definitions
 		app.define
-			MOVE_HIGHLIGHT_COLOR:	"mediumSlateBlue"
-			ATTACK_HIGHLIGHT_COLOR:	"red"
+			MOVE_HIGHLIGHT_COLOR:	0x69a0d1
+			ATTACK_HIGHLIGHT_COLOR:	0xff0000
 
 		class ControlState
 			constructor: (@scene) ->
@@ -68,8 +68,8 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 
 			repositionMenu: ->
 				@menuEl.offset
-					left:	@scene.selectedUnit.tile.left - @scene.space.camera.left
-					top:	@scene.selectedUnit.tile.top - @scene.space.camera.top
+					left:	input.mouseX - @menuEl.width()
+					top:	input.mouseY - @menuEl.height()
 
 			update: ->
 				super()
