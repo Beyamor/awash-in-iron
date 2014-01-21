@@ -90,10 +90,10 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				if input.pressed "vk_n"
 					app.scene = new ns.PlayScene
 
-				if input.isDown "rot-right"
-					@camera.rotation.z += 0.1
-				else if input.isDown "rot-left"
-					@camera.rotation.z -= 0.1
+				if input.pressed "rot-right"
+					@camera.rotation.z += Math.PI * 2 / 8
+				if input.pressed "rot-left"
+					@camera.rotation.z -= Math.PI * 2 / 8
 
 				@camera.position.z	= defs.CAMERA_HEIGHT
 				@camera.rotation.x	= defs.CAMERA_ANGLE
