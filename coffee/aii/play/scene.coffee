@@ -86,9 +86,10 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@level.grid[5][5].addUnit new Unit
 
 				if defs.RENDER_3D
-					camera.position.z = 20
+					camera.position.z = 5
 					camera.position.x = @level.pixelWidth / 2 * RENDER_SCALE
-					camera.position.y = @level.pixelHeight / 2 * RENDER_SCALE
+					camera.position.y = 0 #@level.pixelHeight / 2 * RENDER_SCALE
+					camera.rotation.x += 0.5
 				else
 					@space.camera = new cams.BoundedCamera {left: 0, right: @level.pixelWidth,\
 										top: 0, bottom: @level.pixelWidth},
