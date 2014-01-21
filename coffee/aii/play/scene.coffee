@@ -5,7 +5,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 	({Scene}, {Level}, cams,\
 	input, app, definitionsDebug,\
 	{Unit}, control, {EntitySpace},\
-	{Canvas}, {SceneRenderer, SceneEntityList, RENDER_SCALE}, THREE) ->
+	{Canvas}, {SceneRenderer, SceneEntityList, RENDER_SCALE, SceneCamera}, THREE) ->
 		ns = {}
 
 		defs = app.definitions
@@ -48,15 +48,16 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 					scene = new THREE.Scene
 
 					camera = new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
+					scene.add camera
 
 					renderer = new THREE.WebGLRenderer
 					renderer.setSize ACTION_PANEL_WIDTH, ACTION_PANEL_HEIGHT
 					app.container.append renderer.domElement
 
 					@space = new EntitySpace
-							camera:		camera
+							camera:		new SceneCamera camera
 							entities:	new SceneEntityList scene
-							renderer:	new SceneRenderer scene, renderer
+							renderer:	new SceneRenderer scene, renderer, camera
 					
 				else
 					canvas = new Canvas width: ACTION_PANEL_WIDTH, height: ACTION_PANEL_HEIGHT
@@ -100,9 +101,9 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				if input.pressed "vk_n"
 					app.scene = new ns.PlayScene
 
-				if input.isDown "mouse-left"
-					@space.camera.rotation.y += (input.mouseX - input.prevMouseX) / 1000
-					@space.camera.rotation.x += (input.mouseY - input.prevMouseY) / 1000
+				#if input.isDown "mouse-left"
+				#	@space.camera.rotation.y += (input.mouseX - input.prevMouseX) / 1000
+				#	@space.camera.rotation.x += (input.mouseY - input.prevMouseY) / 1000
 
 			@properties
 				mouseTile:
