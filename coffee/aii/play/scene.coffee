@@ -50,6 +50,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 					camera = new THREE.PerspectiveCamera 75, ACTION_PANEL_WIDTH / ACTION_PANEL_HEIGHT, 0.1, 1000
 					scene.add camera
+					@camera = camera
 
 					renderer = new THREE.WebGLRenderer
 					renderer.setSize ACTION_PANEL_WIDTH, ACTION_PANEL_HEIGHT
@@ -89,6 +90,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 					camera.position.z = 5
 					camera.position.x = @level.pixelWidth / 2 * RENDER_SCALE
 					camera.position.y = 0 #@level.pixelHeight / 2 * RENDER_SCALE
+					camera.rotation.order = "ZYX"
 					camera.rotation.x += 0.5
 				else
 					@space.camera = new cams.BoundedCamera {left: 0, right: @level.pixelWidth,\
@@ -108,6 +110,12 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				#if input.isDown "mouse-left"
 				#	@space.camera.rotation.y += (input.mouseX - input.prevMouseX) / 1000
 				#	@space.camera.rotation.x += (input.mouseY - input.prevMouseY) / 1000
+				
+				if defs.RENDER_3D
+					if input.isDown "rot-right"
+						@camera.rotation.z += 0.1
+					else if input.isDown "rot-left"
+						@camera.rotation.z -= 0.1
 
 			@properties
 				mouseTile:

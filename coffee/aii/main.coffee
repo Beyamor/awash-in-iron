@@ -21,6 +21,8 @@ define ['jinn/app', 'jinn/debug', 'jinn/input',
 			"pan-right":	"vk_d"
 			"pan-up":	"vk_w"
 			"pan-down":	"vk_s"
+			"rot-right":	"vk_e"
+			"rot-left":	"vk_q"
 
 		app.define
 			RENDER_3D:	true
