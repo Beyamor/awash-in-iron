@@ -20,8 +20,8 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				dx -= 1 if input.isDown "pan-left"
 				dx += 1 if input.isDown "pan-right"
-				dy -= 1 if input.isDown "pan-up"
-				dy += 1 if input.isDown "pan-down"
+				dy += 1 if input.isDown "pan-up"
+				dy -= 1 if input.isDown "pan-down"
 
 				if dx isnt 0 and dy isnt 0
 					dx *= Math.SQRT1_2
