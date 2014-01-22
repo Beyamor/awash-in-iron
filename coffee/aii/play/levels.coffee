@@ -10,12 +10,10 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 			dirt:
 				color:		0xE0D294
 				isPassable:	true
-				height:		1
 
 			rock:
 				color:		0x47473C
 				isPassable:	false
-				height:		1.5
 		}
 
 		class Tile extends Entity
@@ -31,10 +29,11 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 					layer:		200
 					centered:	true
 
-				geometry	= new THREE.CubeGeometry 1, 1, @terrain.height
-				material	= new THREE.MeshLambertMaterial color: @terrain.color, ambient: @terrain.color
-				@model		= new THREE.Mesh geometry, material
-				@model.tile	= this
+				geometry		= new THREE.CubeGeometry 1, 1, 1
+				material		= new THREE.MeshLambertMaterial color: @terrain.color, ambient: @terrain.color
+				@model			= new THREE.Mesh geometry, material
+				@model.tile		= this
+				@model.position.z	= -0.5
 
 			addUnit: (unit) ->
 				throw new Error "Tiles already contains a unit" if @unit?
@@ -202,9 +201,10 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 				@x = tile.x
 				@y = tile.y
 
-				geometry	= new THREE.CubeGeometry 0.9, 0.9, 1.25
+				geometry	= new THREE.CubeGeometry 0.9, 0.9, 1.1
 				material	= new THREE.MeshLambertMaterial color: color, ambient: color
 				@model		= new THREE.Mesh geometry, material
+				@model.position.z -= 0.5
 
 		class ns.Level
 			@WIDTH:		16

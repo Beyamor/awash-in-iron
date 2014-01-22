@@ -29,7 +29,6 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 				material	= new THREE.MeshLambertMaterial color: "grey", ambient: "grey"
 				@model		= new THREE.Mesh geometry, material
 
-				@model.position.z = 0.6
 				@model.rotation.x = Math.PI / 2
 
 			die: ->
