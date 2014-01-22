@@ -1,7 +1,7 @@
 define ["jinn/entities/lists", "three", "jinn/cameras",
-	"jinn/util"],
+	"jinn/util", "jinn/app"],
 	({SimpleEntityList}, THREE, {Camera},\
-	util) ->
+	util, {definitions: defs}) ->
 		ns = {}
 
 		ns.RENDER_SCALE = RENDER_SCALE = 1 / 64
@@ -32,8 +32,17 @@ define ["jinn/entities/lists", "three", "jinn/cameras",
 						@camera.position.y = oldX * Math.sin(@theta) + y * Math.cos(@theta)
 
 		class ns.SceneCamera extends Camera
-			constructor: (camera) ->
-				@pos = new CameraPositionWrapper camera
+			constructor: (@camera) ->
+				@pos = new CameraPositionWrapper @camera
+
+			update: ->
+				@camera.position.z	= defs.CAMERA_HEIGHT
+				@camera.rotation.x	= defs.CAMERA_ANGLE
+
+			@properties
+				rotation:
+					get: -> @camera.rotation.z
+					set: (value) -> @camera.rotation.z = value
 
 		class ns.SceneRenderer
 			constructor: (@scene, @renderer, @camera) ->

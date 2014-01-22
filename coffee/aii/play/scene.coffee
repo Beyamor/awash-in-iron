@@ -36,6 +36,14 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@x += dx * defs.CAMERA_PAN_SPEED * app.elapsed
 				@y += dy * defs.CAMERA_PAN_SPEED * app.elapsed
 
+				if input.pressed "rot-right"
+					@rotation += Math.PI * 2 / 8
+				if input.pressed "rot-left"
+					@rotation -= Math.PI * 2 / 8
+
+			@delegate
+				base:	["rotation"]
+
 		class ns.PlayScene extends Scene
 			
 			constructor: ->
@@ -80,7 +88,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@level.grid[5][5].addUnit new Unit
 
 				camera.position.x = @level.pixelWidth / 2 * RENDER_SCALE
-				camera.position.y = 0 #@level.pixelHeight / 2 * RENDER_SCALE
+				camera.position.y = 0
 				camera.rotation.order = "ZYX"
 
 				light = new THREE.AmbientLight 0x404040
@@ -99,15 +107,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 
 				if input.pressed "vk_n"
 					app.scene = new ns.PlayScene
-
-				if input.pressed "rot-right"
-					@camera.rotation.z += Math.PI * 2 / 8
-				if input.pressed "rot-left"
-					@camera.rotation.z -= Math.PI * 2 / 8
-
-				@camera.position.z	= defs.CAMERA_HEIGHT
-				@camera.rotation.x	= defs.CAMERA_ANGLE
-
+								
 			@properties
 				mouseTile:
 					get: ->
