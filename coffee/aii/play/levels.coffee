@@ -1,7 +1,7 @@
 define ["jinn/util", "jinn/entities", "jinn/graphics",
-	"jinn/app"],
+	"jinn/app", "aii/three"],
 	(util, {Entity}, gfx,\
-	app) ->
+	app, {CubeModel}) ->
 		ns = {}
 
 		defs = app.definitions
@@ -29,10 +29,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 					layer:		200
 					centered:	true
 
-				geometry		= new THREE.CubeGeometry 1, 1, 1
-				material		= new THREE.MeshLambertMaterial color: @terrain.color, ambient: @terrain.color
-				@model			= new THREE.Mesh geometry, material
-				@model.tile		= this
+				@model			= new CubeModel 1, 1, 1, @terrain.color
+				@model.mesh.tile	= this
 				@model.position.z	= -0.5
 
 			addUnit: (unit) ->
@@ -201,9 +199,7 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 				@x = tile.x
 				@y = tile.y
 
-				geometry	= new THREE.CubeGeometry 0.9, 0.9, 1.1
-				material	= new THREE.MeshLambertMaterial color: color, ambient: color
-				@model		= new THREE.Mesh geometry, material
+				@model = new CubeModel 0.9, 0.9, 1.1, color
 				@model.position.z -= 0.5
 
 		class ns.Level

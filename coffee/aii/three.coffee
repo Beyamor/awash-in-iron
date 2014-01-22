@@ -1,10 +1,13 @@
 define ["jinn/entities/lists", "three", "jinn/cameras",
-	"jinn/util", "jinn/app"],
+	"jinn/util", "jinn/app", "underscore",
+	"jinn/app"],
 	({SimpleEntityList}, THREE, {Camera},\
-	util, {definitions: defs}) ->
+	util, {definitions: defs}, _,\
+	app) ->
 		ns = {}
 
 		ns.RENDER_SCALE = RENDER_SCALE = 1 / 64
+		loader		= new THREE.JSONLoader
 
 		class CameraPositionWrapper
 			constructor: (@camera) ->
@@ -61,10 +64,43 @@ define ["jinn/entities/lists", "three", "jinn/cameras",
 
 			add: (e) ->
 				super e
-				@scene.add e.model if e.model?
+				e.model.addTo @scene if e.model?
 
 			remove: (e) ->
 				super e
-				@scene.remove e.model if e.model?
+				e.model.remove() if e.model?
+
+		class ns.Model
+			constructor: (geometryOrAsset, materialOrColor) ->
+				if _.isString(geometryOrAsset)
+					{geometry} = loader.parse app.assets.get geometryOrAsset
+				else
+					geometry = geometryOrAsset
+					
+				if _.isString(materialOrColor) or _.isNumber(materialOrColor)
+					material = new THREE.MeshLambertMaterial color: materialOrColor, ambient: materialOrColor
+				else
+					material = materialOrColor
+
+				@mesh = new THREE.Mesh geometry, material
+
+			addTo: (scene) ->
+				@remove()
+				@scene = scene
+				@scene.add @mesh
+
+			remove: ->
+				return unless @scene?
+
+				@scene.remove @mesh
+				@scene = null
+
+			@delegate
+				mesh:	["position", "rotation"]
+
+		class ns.CubeModel extends ns.Model
+			constructor: (x, y, z, materialOrColor) ->
+				super new THREE.CubeGeometry(x, y, z), materialOrColor
+				
 
 		return ns
