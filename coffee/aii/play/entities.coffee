@@ -26,10 +26,10 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 				#geometry	= new THREE.CubeGeometry 0.75, 0.75, 2
 				loader		= new THREE.JSONLoader
 				{geometry}	= loader.parse app.assets.get "simple-mecha"
-				material	= new THREE.MeshLambertMaterial color: "grey", ambient: "blue"
+				material	= new THREE.MeshLambertMaterial color: "grey", ambient: "grey"
 				@model		= new THREE.Mesh geometry, material
 
-				@model.position.z = 0.7
+				@model.position.z = 0.6
 				@model.rotation.x = Math.PI / 2
 
 			die: ->
