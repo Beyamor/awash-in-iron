@@ -5,7 +5,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 	({Scene}, {Level}, cams,\
 	input, app, definitionsDebug,\
 	{Unit}, control, {EntitySpace},\
-	{Canvas}, {SceneRenderer, SceneEntityList, RENDER_SCALE, SceneCamera}, THREE) ->
+	{Canvas}, {SceneRenderer, SceneEntityList, RENDER_SCALE, SceneCamera, Renderer}, THREE) ->
 		ns = {}
 
 		defs = app.definitions
@@ -63,7 +63,7 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				scene.add camera
 				@camera = camera
 
-				renderer = new THREE.WebGLRenderer
+				renderer = new Renderer
 				renderer.setSize defs.ACTION_PANEL_WIDTH, defs.ACTION_PANEL_HEIGHT
 				app.container.append renderer.domElement
 

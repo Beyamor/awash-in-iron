@@ -9,6 +9,20 @@ define ["jinn/entities/lists", "three", "jinn/cameras",
 		ns.RENDER_SCALE = RENDER_SCALE = 1 / 64
 		loader		= new THREE.JSONLoader
 
+		canUseWebGL = ->
+			try
+				canvas = document.createElement('canvas')
+				return !!window.WebGLRenderingContext and
+					(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+			catch e
+				return false
+
+		ns.Renderer =
+			if canUseWebGL()
+				THREE.WebGLRenderer
+			else
+				THREE.CanvasRenderer
+
 		class CameraPositionWrapper
 			constructor: (@camera) ->
 
