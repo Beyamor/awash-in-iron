@@ -8,6 +8,7 @@ define ['jinn/app', 'jinn/debug', 'jinn/input',
 				fps: true
 
 		app.assets = [
+			["simple-mecha", "models/simple-mecha.json"]
 		]
 
 		app.templates = [

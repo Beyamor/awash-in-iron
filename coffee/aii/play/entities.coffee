@@ -8,14 +8,13 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 		random	= util.random
 
 		class ns.Unit extends Entity
-			constructor: (graphic) ->
+			constructor: ->
 				@maxHp		= random.any [8..11]
 				@strength	= random.any [2..10]
 				@speed		= random.any [2..5]
 				@range		= random.any [2..7]
 
 				super
-					graphic:	graphic
 					centered:	true
 					width:		0.75
 					height:		0.75
@@ -24,9 +23,14 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 						attacker:	true
 						defender:	true
 
-				geometry	= new THREE.CubeGeometry 0.75, 0.75, 2
-				material	= new THREE.MeshLambertMaterial color: "blue", ambient: "blue"
+				#geometry	= new THREE.CubeGeometry 0.75, 0.75, 2
+				loader		= new THREE.JSONLoader
+				{geometry}	= loader.parse app.assets.get "simple-mecha"
+				material	= new THREE.MeshLambertMaterial color: "grey", ambient: "blue"
 				@model		= new THREE.Mesh geometry, material
+
+				@model.position.z = 0.7
+				@model.rotation.x = Math.PI / 2
 
 			die: ->
 				@tile.removeUnit() if @tile?
