@@ -8,11 +8,11 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 
 		terrains = {
 			dirt:
-				color:		0xE0D294
+				color:		"#E0D294"
 				isPassable:	true
 
 			rock:
-				color:		0x47473C
+				color:		"#47473C"
 				isPassable:	false
 		}
 
