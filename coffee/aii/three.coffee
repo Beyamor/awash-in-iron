@@ -101,6 +101,28 @@ define ["jinn/entities/lists", "three", "jinn/cameras",
 		class ns.CubeModel extends ns.Model
 			constructor: (x, y, z, materialOrColor) ->
 				super new THREE.CubeGeometry(x, y, z), materialOrColor
-				
 
+		class CompositeModelPosition
+			constructor: (@models) ->
+
+			@properties
+				x:
+					get: -> if @models.length then @models[0].position.x else 0
+					set: (x) -> model.position.x = x for model in @models
+				y:
+					get: -> if @models.length then @models[0].position.y else 0
+					set: (y) -> model.position.y = y for model in @models
+				z:
+					get: -> if @models.length then @models[0].position.z else 0
+					set: (z) -> model.position.z = z for model in @models
+
+		class ns.CompositeModel
+			constructor: (@models...) ->
+				@position = new CompositeModelPosition @models
+
+			addTo: (scene) ->
+				model.addTo scene for model in @models
+
+			remove: ->
+				model.remove() for model in @models
 		return ns
