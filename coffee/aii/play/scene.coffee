@@ -1,11 +1,13 @@
 define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 	"jinn/input", "jinn/app", "jinn/debug/definitions",
 	"aii/play/entities", "aii/play/control", "jinn/entities/spaces",
-	"jinn/canvas", "aii/three", "three"],
+	"jinn/canvas", "aii/three", "three",
+	"jinn/util"],
 	({Scene}, {Level}, cams,\
 	input, app, definitionsDebug,\
-	{Unit}, control, {EntitySpace},\
-	{Canvas}, {SceneRenderer, SceneEntityList, RENDER_SCALE, SceneCamera, Renderer}, THREE) ->
+	{Unit, Boulder}, control, {EntitySpace},\
+	{Canvas}, {SceneRenderer, SceneEntityList, RENDER_SCALE, SceneCamera, Renderer}, THREE,\
+	util) ->
 		ns = {}
 
 		defs = app.definitions
@@ -82,10 +84,19 @@ define ['jinn/scenes', "aii/play/levels", "jinn/cameras",
 				@level = new Level
 				@space.add tile for tile in @level.tiles
 
-				@level.grid[3][3].addUnit new Unit
-				@level.grid[5][3].addUnit new Unit
-				@level.grid[3][5].addUnit new Unit
-				@level.grid[5][5].addUnit new Unit
+				@level.grid[3][3].addOccupant new Unit
+				@level.grid[5][3].addOccupant new Unit
+				@level.grid[3][5].addOccupant new Unit
+				@level.grid[5][5].addOccupant new Unit
+
+				for i in [0...20]
+					x = util.random.intInRange Level.WIDTH
+					y = util.random.intInRange Level.HEIGHT
+
+					tile = @level.grid[x][y]
+					continue if tile.isOccupied
+
+					tile.addOccupant new Boulder
 
 				camera.position.x = @level.pixelWidth / 2 * RENDER_SCALE
 				camera.position.y = 0

@@ -9,6 +9,7 @@ define ['jinn/app', 'jinn/debug', 'jinn/input',
 
 		app.assets = [
 			["simple-mecha", "models/simple-mecha.json"]
+			["boulder", "models/boulder.json"]
 		]
 
 		app.templates = [

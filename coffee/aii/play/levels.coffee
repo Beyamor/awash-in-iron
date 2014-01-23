@@ -1,26 +1,18 @@
 define ["jinn/util", "jinn/entities", "jinn/graphics",
-	"jinn/app", "aii/three", "three"],
+	"jinn/app", "aii/three", "three",
+	"aii/play/entities"],
 	(util, {Entity}, gfx,\
-	app, {CubeModel}, THREE) ->
+	app, {CubeModel}, THREE,\
+	{Unit}) ->
 		ns = {}
 
 		defs = app.definitions
-
-		terrains = {
-			dirt:
-				color:		"#E0D294"
-				isPassable:	true
-
-			rock:
-				color:		"#47473C"
-				isPassable:	false
-		}
 
 		class Tile extends Entity
 			@WIDTH:		1
 			@HEIGHT:	1
 
-			constructor: (@level, @terrain, @gridX, @gridY) ->
+			constructor: (@level, @gridX, @gridY) ->
 				super
 					x:		@gridX
 					y:		@gridY
@@ -29,34 +21,34 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 					layer:		200
 					centered:	true
 
-				@model = new CubeModel 1, 1, 1, @terrain.color
+				@model = new CubeModel 1, 1, 1, "#E0D294"
 				@model.mesh.tile = this
 				@model.position.z = -0.5
 
-			addUnit: (unit) ->
-				throw new Error "Tiles already contains a unit" if @unit?
+			addOccupant: (occupant) ->
+				throw new Error "Tile already full" if @occupant?
 
-				unit.tile.removeUnit() if unit.tile?
+				occupant.tile.removeOccupant() if occupant.tile?
 
-				unit.tile	= this
-				@unit		= unit
-				@space.add unit if @space?
+				occupant.tile = this
+				@occupant = occupant
+				@space.add occupant if @space?
 
-				unit.x = @x
-				unit.y = @y
+				occupant.x = @x
+				occupant.y = @y
 
 			added: ->
-				@space.add @unit if @unit?
+				@space.add @occupant if @occupant?
 
-			removeUnit: ->
-				return unless @unit?
+			removeOccupant: ->
+				return unless @occupant?
 
-				@unit.space.remove @unit if @unit.space?
-				@unit.tile	= null
-				@unit		= null
+				@occupant.space.remove @occupant if @occupant.space?
+				@occupant.tile	= null
+				@occupant	= null
 
 			remove: ->
-				@world.remove unit if @unit?
+				@world.remove occupant if @occupant?
 
 			neighboursInRadius: (range, filter) ->
 				return [] if range <= 0
@@ -182,7 +174,13 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 						return @_neighbours.concat()
 
 				isPassable:
-					get: -> @terrain.isPassable and not @unit?
+					get: -> not @occupant?
+
+				unit:
+					get: -> @occupant if @occupant instanceof Unit
+
+				isOccupied:
+					get: -> !! @occupant
 
 		class ns.TileHighlight extends Entity
 			constructor: (tile, color) ->
@@ -207,13 +205,9 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 			@HEIGHT:	16
 
 			constructor: ->
-				terrainOptions = []
-				terrainOptions.push terrains.dirt for i in [0...10]
-				terrainOptions.push terrains.rock
-
 				@tiles	= []
 				@grid	= util.array2d ns.Level.WIDTH, ns.Level.HEIGHT, (x, y) =>
-						tile = new Tile this, util.random.any(terrainOptions), x, y
+						tile = new Tile this, x, y
 						@tiles.push tile
 						return tile
 

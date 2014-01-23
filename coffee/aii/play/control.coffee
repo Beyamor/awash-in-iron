@@ -98,7 +98,7 @@ define ["jinn/control/states", "jinn/input", "aii/play/levels",
 				if input.pressed "mouse-left"
 					mouseTile = @scene.mouseTile
 					if mouseTile? and @reachableTiles.contains mouseTile
-						mouseTile.addUnit @scene.selectedUnit
+						mouseTile.addOccupant @scene.selectedUnit
 						@scene.controlState.switchTo "default"
 
 				else if input.pressed "mouse-right"

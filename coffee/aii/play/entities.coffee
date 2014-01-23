@@ -25,10 +25,21 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 						attacker:	true
 						defender:	true
 
-				@model			= new Model "simple-mecha", "grey"
+				@model			= new Model "simple-mecha", "slateblue"
 				@model.rotation.x	= Math.PI / 2
 
 			die: ->
-				@tile.removeUnit() if @tile?
+				@tile.removeOccupant() if @tile?
+
+		class ns.Boulder extends Entity
+			constructor: ->
+				super
+					centered:	true
+					width:		0.75
+
+				@model			= new Model "boulder", "grey"
+				@model.rotation.order	= "ZYX"
+				@model.rotation.x	= Math.PI / 2
+				@model.rotation.z	= util.random.angle
 
 		return ns
