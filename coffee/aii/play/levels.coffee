@@ -1,7 +1,7 @@
 define ["jinn/util", "jinn/entities", "jinn/graphics",
 	"jinn/app", "aii/three", "three"],
 	(util, {Entity}, gfx,\
-	app, {CubeModel, CompositeModel}, THREE) ->
+	app, {CubeModel}, THREE) ->
 		ns = {}
 
 		defs = app.definitions
@@ -29,15 +29,8 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 					layer:		200
 					centered:	true
 
-				@model			= new CompositeModel(
-								new CubeModel(1, 1, 1, @terrain.color),
-								new CubeModel(1.01, 1.01, 1.01,
-									new THREE.MeshBasicMaterial
-										color: "black"
-										wireframe: true
-								)
-				)
-				@model.models[0].mesh.tile = this
+				@model = new CubeModel 1, 1, 1, @terrain.color
+				@model.mesh.tile = this
 				@model.position.z = -0.5
 
 			addUnit: (unit) ->
