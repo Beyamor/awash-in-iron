@@ -19,7 +19,6 @@ define ["jinn/entities", "jinn/graphics", "aii/play/mixins",
 				super
 					centered:	true
 					width:		0.75
-					height:		0.75
 					mixins:
 						healthHaver:	true
 						attacker:	true

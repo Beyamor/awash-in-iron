@@ -18,10 +18,9 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 					y:		@gridY
 					width:		Tile.WIDTH
 					height:		Tile.HEIGHT
-					layer:		200
 					centered:	true
 
-				@model = new CubeModel 1, 1, 1, "#E0D294"
+				@model = new CubeModel @width, @height, 1, "#E0D294"
 				@model.mesh.tile = this
 				@model.position.z = -0.5
 
@@ -184,20 +183,19 @@ define ["jinn/util", "jinn/entities", "jinn/graphics",
 
 		class ns.TileHighlight extends Entity
 			constructor: (tile, color) ->
-				margin = 6
+				margin = 0.1
 
 				super
 					x:		tile.x
 					y:		tile.y
 					width:		tile.width - margin
 					height:		tile.height - margin
-					layer:		tile.layer - 1
 					centered:	true
 
 				@x = tile.x
 				@y = tile.y
 
-				@model = new CubeModel 0.9, 0.9, 1.1, color
+				@model = new CubeModel @width, @height, 1.1, color
 				@model.position.z -= 0.5
 
 		class ns.Level
